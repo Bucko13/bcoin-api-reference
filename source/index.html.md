@@ -11,11 +11,11 @@ toc_footers:
   - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
 
 includes:
-  - errors
   - node
   - coin
   - transaction
   - wallet
+  - errors
 
 search: true
 ---
