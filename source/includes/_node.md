@@ -62,6 +62,8 @@ const info = await client.getInfo();
 }
 ```
 ### HTTP Request
+<p>Get server info. No params.</p>
+
 `GET /`
 
 
