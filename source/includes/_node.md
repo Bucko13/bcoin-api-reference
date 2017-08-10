@@ -86,6 +86,8 @@ const client = new bcoin.http.Client({
 Get server Info.
 
 ### HTTP Request
+<p>Get server info. No params.</p>
+
 `GET /`
 
  No Params.
