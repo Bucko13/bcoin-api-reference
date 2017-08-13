@@ -1,9 +1,9 @@
 # Transaction
-Transction manipulations via API.
+Getting transaction information via APi.
 
 <aside class="info">
 You need to enable <code>index-tx</code> and <code>index-address</code> in order
-to lookup transactions by transaction hashes and addresses, repsectively.
+to lookup transactions by transaction hashes and addresses, respectively.
 </aside>
 
 ## Get tx by txhash
