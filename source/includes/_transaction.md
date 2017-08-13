@@ -142,6 +142,7 @@ const client = new bcoin.http.Client({
 
 ```json
 [
+  ...
   {
     "hash": "8351d991c5dfb49d534fcd28f56bb2d5b0d5f31f5c9e2e0711b5f86312a5abfe",
     "witnessHash": "8351d991c5dfb49d534fcd28f56bb2d5b0d5f31f5c9e2e0711b5f86312a5abfe",
@@ -203,12 +204,11 @@ const client = new bcoin.http.Client({
       }
     ],
     "locktime": 0
-  },
-  ...
+  }
 ]
 ```
 
-Returns transaction object by address
+Returns transaction objects array by address
 
 ### HTTP Request
 `GET /tx/address/:address`
@@ -219,3 +219,121 @@ Parameter | Description
 :address | Bitcoin address.
 
 ## Get tx by addresses
+```javascript
+let address0, address1;
+```
+
+```shell--vars
+address0='n3BmXQPa1dKi3zEyCdCGNHTuE5GLdmw1Tr';
+address1='mwLHWwWPDwtCBZA7Ltg9QSzKK5icdCU5rb';
+```
+
+```shell--curl
+ curl $url/tx/address \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data "{ \"addresses\":[ \"$address0\", \"$address1\" ]}"
+```
+
+```shell--cli
+No CLI Option.
+```
+
+```javascript
+const client = new bcoin.http.Client({
+  network: 'testnet',
+  db: 'leveldb'
+});
+
+(async () => {
+  await client.open();
+
+  const txs = await client.getTXByAddress([address0, address1]);
+
+  console.log(txs);
+
+  await client.close();
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  ...
+  {
+    "hash": "4692772a73ea834c836915089acf97f2c790380a2b8fd32f82729da72545d8c5",
+    "witnessHash": "4692772a73ea834c836915089acf97f2c790380a2b8fd32f82729da72545d8c5",
+    "fee": 50000,
+    "rate": 134048,
+    "mtime": 1501093478,
+    "height": 500,
+    "block": "00000000a2424460c992803ed44cfe0c0333e91af04fde9a6a97b468bf1b5f70",
+    "time": 1296746771,
+    "index": 3,
+    "version": 1,
+    "flag": 1,
+    "inputs": [
+      {
+        "prevout": {
+          "hash": "cff00582fa957178139b0db60228fc9b252adc01ec6b11c3e16f708802c12d3f",
+          "index": 0
+        },
+        "script": "48304502203ef5c34af08cd2865820757844ac079e081e7b41bf427ac896f41ab12a9f9857022100bd0914548145648ec538c088640228baaa983a7c78fbf49526c5c30358fe0f54012103420f2cb862c7a77d7b2376660573eb6976f01f59222892dd16326ee7ef37fc5b",
+        "witness": "00",
+        "sequence": 4294967295,
+        "coin": {
+          "version": 1,
+          "height": 499,
+          "value": 346342,
+          "script": "76a914f93f789537ba00a23e7e84dcf145dae36f50ea8088ac",
+          "address": "n4Eras4wT4kRjX34zP96nCiHqietgeKnTn",
+          "coinbase": false
+        }
+      },
+      {
+        "prevout": {
+          "hash": "39661409f6bc4d9e08e413e01f867fe276e12e83dae89ee351df17757ca64b3f",
+          "index": 0
+        },
+        "script": "47304402201468bcfff3b1d8bdd0ba5fd94692c4dc7766411bdafe8d65b6e7a5be8f7efa8602207cdcbe3a107db271f24d7d8ac83a887ef4a1b72c910cc9ea5627b4cf37e87bcf0121025f9a9951e2d2a3037c1af09d9789b84a5776c504cd5b59bccd469124eb59835f",
+        "witness": "00",
+        "sequence": 4294967295,
+        "coin": {
+          "version": 1,
+          "height": 499,
+          "value": 1024528,
+          "script": "76a914c4a22b009b02fe8488c5543f0873e062712b7f6888ac",
+          "address": "mySf1HGynwyAuNyYrapRnwM83k3svzWTgD",
+          "coinbase": false
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "value": 1095497,
+        "script": "76a914ad7d7b9ac5260ad13fa55e06143283f5b36495f788ac",
+        "address": "mwLHWwWPDwtCBZA7Ltg9QSzKK5icdCU5rb"
+      },
+      {
+        "value": 225373,
+        "script": "76a914bc0f9f5fc9dc55323d52a9e354b5fb67cecd389788ac",
+        "address": "mxfL3bJohxaoBkKNtUF8xSU1DVKzbiChnZ"
+      }
+    ],
+    "locktime": 0
+  }
+]
+```
+
+Returns transaction objects array by addresses
+
+### HTTP Request
+`POST /tx/address`
+
+### POST Parameters (JSON)
+Parameter | Description
+--------- | -----------
+addresses | array of bitcoin addresses
