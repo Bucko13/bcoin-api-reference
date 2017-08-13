@@ -244,7 +244,10 @@ txhash='0100000001ff2a3afc3a8133a3bfeedd391bc3cff39d47fe4e3caee492a93f92edff76b9
 ```
 
 ```shell--curl
-curl $url/broadcast -X POST --data "{ \"tx\": \"$txhash\" }"
+curl $url/broadcast \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data "{ \"tx\": \"$txhash\" }"
 ```
 
 ```shell--cli
