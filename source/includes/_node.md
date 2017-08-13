@@ -82,10 +82,13 @@ const client = new bcoin.http.Client({
   }
 }
 ```
+
+Get server Info.
+
 ### HTTP Request
 `GET /`
 
-Get server Info. No Params.
+ No Params.
 
 
 ## Get mempool snapshot
@@ -131,6 +134,7 @@ Get mempool snapshot (array of json txs).
 ### HTTP Request
 `GET /mempool`
 
+No Params.
 
 
 ## Get block by hash or height
