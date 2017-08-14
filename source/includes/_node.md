@@ -4,10 +4,17 @@
 
 Route for JSON-RPC requests, most of which mimic the bitcoind RPC calls completely.
 
+```shell--curl
+curl $url \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{ "method": "getblockchaininfo", "params": [] }'
+```
+
 ### HTTP Request
 `POST /`
 
-
+More about RPC Requests in RPC Docs.
 
 ## Get server info
 
@@ -20,7 +27,21 @@ bcoin cli info
 ```
 
 ```javascript
-const info = await client.getInfo();
+const client = new bcoin.http.Client({
+  network: 'testnet',
+  db: 'leveldb'
+});
+
+(async () => {
+  await client.open();
+  const info = await client.getInfo();
+
+  console.log(info);
+
+  await client.close();
+})().catch((err) => {
+  console.error(err.stack);
+});
 ```
 
 > The above command returns JSON structured like this:
@@ -61,11 +82,15 @@ const info = await client.getInfo();
   }
 }
 ```
+
+Get server Info.
+
 ### HTTP Request
 <p>Get server info. No params.</p>
 
 `GET /`
 
+ No Params.
 
 
 ## Get mempool snapshot
@@ -79,7 +104,21 @@ bcoin cli mempool
 ```
 
 ```javascript
-const mempoolTxs = await client.getMempool();
+const client = new bcoin.http.Client({
+  network: 'testnet',
+  db: 'leveldb'
+});
+
+(async () => {
+  await client.open();
+  const mempoolTxs = await client.getMempool();
+
+  console.log(mempoolTxs);
+
+  await client.close();
+})().catch((err) => {
+  console.error(err.stack);
+});
 ```
 
 > The above command returns JSON structured like this:
@@ -97,13 +136,18 @@ Get mempool snapshot (array of json txs).
 ### HTTP Request
 `GET /mempool`
 
+No Params.
 
 
 ## Get block by hash or height
 
+```javascript
+let blockHash, blockHeight;
+```
+
 ```shell--vars
-blockHash='00000000cabd2d0245add40f335bab18d3e837eccf868b64aabbbbac74fb21e0'
-blockHeight='1500'
+blockHash='00000000cabd2d0245add40f335bab18d3e837eccf868b64aabbbbac74fb21e0';
+blockHeight='1500';
 ```
 
 ```shell--curl
@@ -117,8 +161,22 @@ bcoin cli block $blockHeight # by height
 ```
 
 ```javascript
-const block = await client.getBlock(blockHash); // by hash
-const block = await client.getBlock(blockHeight); // by height
+const client = new bcoin.http.Client({
+  network: 'testnet',
+  db: 'leveldb'
+});
+
+(async () => {
+  await client.open();
+  const blockByHash = await client.getBlock(blockHash);
+  const blockByHeight = await client.getBlock(blockHeight);
+
+  console.log(blockByHash, blockByHeight);
+
+  await client.close();
+})().catch((err) => {
+  console.error(err.stack);
+});
 ```
 
 > The above command returns JSON structured like this:
@@ -183,13 +241,19 @@ Parameter | Description
 
 
 ## Broadcast transaction
+```javascript
+let txhash;
+```
 
 ```shell--vars
 txhash='0100000001ff2a3afc3a8133a3bfeedd391bc3cff39d47fe4e3caee492a93f92edff76b9d4000000006a47304402204cc6a35cb3d3d976cb10e3c98df66aba29b5efc7b5ecdbc0f4ed949aa64235f20220512fce2d63739012094f12c3a9402919b32149c32d4d71a3448d4695ae8e3dc601210325c9abd8916d6e5ba0b3c501a70c0186f3bf6e4567922b9d83ae205d1d9e9affffffffff0244cff505000000001976a91423f5580d600bcfe5b99d9fe737530fd8b32492a088ac00111024010000001976a91473f3ecd665da93701358bd957393b8085c1aa2d988ac00000000';
 ```
 
 ```shell--curl
-curl $url/broadcast -X POST --data "{ \"tx\": \"$txhash\" }"
+curl $url/broadcast \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data "{ \"tx\": \"$txhash\" }"
 ```
 
 ```shell--cli
@@ -197,7 +261,22 @@ bcoin cli broadcast $txhash
 ```
 
 ```javascript
-const result = await client.broadcast(txhash);
+const client = new bcoin.http.Client({
+  network: 'testnet',
+  db: 'leveldb'
+});
+
+(async () => {
+  await client.open();
+
+  const result = await client.broadcast(txhash);
+
+  console.log(result);
+
+  await client.close();
+})().catch((err) => {
+  console.error(err.stack);
+});
 ```
 
 > The above command returns JSON structured like this:
