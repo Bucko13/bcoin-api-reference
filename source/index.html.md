@@ -15,6 +15,7 @@ includes:
   - node
   - coin
   - transaction
+  - wallet_admin
   - wallet
   - errors
 
