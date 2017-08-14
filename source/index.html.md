@@ -2,7 +2,8 @@
 title: Bcoin API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
+  - shell--curl: cURL
+  - shell--cli: CLI
   - javascript
 
 toc_footers:
@@ -29,12 +30,25 @@ The default bcoin HTTP server listens on the standard RPC port (`8332` for main,
 # Authentication
 
 ## Auth
-```shell
-$ curl http://x:[api-key]@127.0.0.1:8332/
+```shell--curl
+curl http://x:[api-key]@127.0.0.1:8332/
+```
+
+```shell--cli
+export BCOIN_API_KEY=[api-key]
+bcoin cli info
 ```
 
 ```javascript
-
+const client = new bcoin.http.Client({
+  apiKey: [api-key],
+  //...
+});
+// Or wallet
+const wallet = new bcoin.http.Wallet({
+  apiKey: [api-key],
+  //...
+});
 ```
 
 > Make sure to replace `[api-key]` with your own key.
