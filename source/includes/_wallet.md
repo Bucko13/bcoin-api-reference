@@ -5,42 +5,42 @@
 
 ```json
 {
-	"network": "testnet",
-	"wid": 1,
-	"id": "primary",
-	"initialized": true,
-	"watchOnly": false,
-	"accountDepth": 1,
-	"token": "977fbb8d212a1e78c7ce9dfda4ff3d7cc8bcd20c4ccf85d2c9c84bbef6c88b3c",
-	"tokenDepth": 0,
-	"state": {
-		"tx": 0,
-		"coin": 0,
-		"unconfirmed": 0,
-		"confirmed": 0
-	},
-	"master": {
-		"encrypted": false
-	},
-	"account": {
-		"name": "default",
-		"initialized": true,
-		"witness": false,
-		"watchOnly": false,
-		"type": "pubkeyhash",
-		"m": 1,
-		"n": 1,
-		"accountIndex": 0,
-		"receiveDepth": 1,
-		"changeDepth": 1,
-		"nestedDepth": 0,
-		"lookahead": 10,
-		"receiveAddress": "mwfDKs919Br8tNFamk6RhRpfaa6cYQ5fMN",
-		"nestedAddress": null,
-		"changeAddress": "msG6V75J6XNt5mCqBhjgC4MjDH8ivEEMs9",
-		"accountKey": "tpubDDRH1rj7ut9ZjcGakR9VGgXU8zYSZypLtMr7Aq6CZaBVBrCaMEHPzye6ZZbUpS8YmroLfVp2pPmCdaKtRdCuTCK2HXzwqWX3bMRj3viPMZo",
-		"keys": []
-	}
+  "network": "testnet",
+  "wid": 1,
+  "id": "primary",
+  "initialized": true,
+  "watchOnly": false,
+  "accountDepth": 1,
+  "token": "977fbb8d212a1e78c7ce9dfda4ff3d7cc8bcd20c4ccf85d2c9c84bbef6c88b3c",
+  "tokenDepth": 0,
+  "state": {
+    "tx": 0,
+    "coin": 0,
+    "unconfirmed": 0,
+    "confirmed": 0
+  },
+  "master": {
+    "encrypted": false
+  },
+  "account": {
+    "name": "default",
+    "initialized": true,
+    "witness": false,
+    "watchOnly": false,
+    "type": "pubkeyhash",
+    "m": 1,
+    "n": 1,
+    "accountIndex": 0,
+    "receiveDepth": 1,
+    "changeDepth": 1,
+    "nestedDepth": 0,
+    "lookahead": 10,
+    "receiveAddress": "mwfDKs919Br8tNFamk6RhRpfaa6cYQ5fMN",
+    "nestedAddress": null,
+    "changeAddress": "msG6V75J6XNt5mCqBhjgC4MjDH8ivEEMs9",
+    "accountKey": "tpubDDRH1rj7ut9ZjcGakR9VGgXU8zYSZypLtMr7Aq6CZaBVBrCaMEHPzye6ZZbUpS8YmroLfVp2pPmCdaKtRdCuTCK2HXzwqWX3bMRj3viPMZo",
+    "keys": []
+  }
 }
 ```
 
@@ -77,9 +77,9 @@ bcoin cli wallet get --network=testnet --token=$token
 ```javascript
 `use strict`
 
-const httpWallet = new bcoin.HTTPWallet({ 
-    id, 
-    token,
+const httpWallet = new bcoin.http.Wallet({ 
+    id: id, 
+    token: token,
     network: 'testnet',
     db: 'leveldb'
 });
@@ -128,84 +128,11 @@ const id = 'test';
 
 > Output is same as wallet object above
 
-```json
-{
-	"network": "testnet",
-	"wid": 1,
-	"id": "test",
-	"initialized": true,
-	"watchOnly": false,
-	"accountDepth": 1,
-	"token": "977fbb8d212a1e78c7ce9dfda4ff3d7cc8bcd20c4ccf85d2c9c84bbef6c88b3c",
-	"tokenDepth": 0,
-	"state": {
-		"tx": 0,
-		"coin": 0,
-		"unconfirmed": 0,
-		"confirmed": 0
-	},
-	"master": {
-		"encrypted": false
-	},
-	"account": {
-		...
-	}
-}
-```
-
-Get wallet info by ID.
-
-### HTTP Request
-`GET /wallet/:id`
-
-Parameters | Description
----------- | -----------
-id <br> _string_ | named id of the wallet whose info you would like to retrieve
-
-## Wallet Rescan
-
-> Response Body:
-
-```json
-    {"success": true}
-```
-
-Initiates a blockchain rescan for the walletdb. Wallets will be rolled back to the specified height (transactions above this height will be unconfirmed).
-
-### Example HTTP Request
-`POST /rescan?height=100000`
-
-
-
-## HTTP Request 
-
-`POST /wallet/_admin/resend` 
-
-##POST /wallet/_admin/backup 
-
-Safely backup the wallet database to specified path (creates a clone of the database).
-
-## HTTP Request 
-
-`POST /wallet/_admin/backup` 
-
-##GET /wallet/_admin/wallets 
-
-List all wallet IDs. Returns an array of strings.
-
-## HTTP Request 
-
-`GET /wallet/_admin/wallets` 
-
-##GET /wallet/:id 
-
-> Sample response: 
-
 ```json 
 {
-  "network": "regtest",
+  "network": "testnet",
   "wid": 1,
-  "id": "primary",
+  "id": "test",
   "initialized": true,
   "watchOnly": false,
   "accountDepth": 1,
@@ -239,11 +166,27 @@ List all wallet IDs. Returns an array of strings.
     "accountKey": "tpubDC5u44zLNUVo2gPVdqCbtX644PKccH5VZB3nqUgeCiwKoi6BQZGtr5d6hhougcD6PqjszsbR3xHrQ5k8yTbUt64aSthWuNdGi7zSwfGVuxc",
     "keys": []
   }
-}```
+}
+```
 
 Get wallet info by ID.
 
-## HTTP Request 
+### HTTP Request
+`GET /wallet/:id`
+
+Parameters | Description
+---------- | -----------
+id <br> _string_ | named id of the wallet whose info you would like to retrieve
+
+##GET /wallet/:id 
+
+> Sample response: 
+
+
+
+Get wallet info by ID.
+
+### HTTP Request 
 
 `GET /wallet/:id` 
 
@@ -264,11 +207,12 @@ Get wallet info by ID.
       "passphrase": ""
     }
   }
-}```
+}
+```
 
 Get wallet master HD key. This is normally censored in the wallet info route. The provided api key must have admin access.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/master` 
 
@@ -278,7 +222,7 @@ Get wallet master HD key. This is normally censored in the wallet info route. Th
 
 ```json 
 {
-  "network": "regtest",
+  "network": "testnet",
   "wid": 2,
   "id": "foo",
   "initialized": true,
@@ -314,11 +258,12 @@ Get wallet master HD key. This is normally censored in the wallet info route. Th
     "accountKey": "tpubDDh2XgSds1vBbeVgye88gsGQeCityoywRndtyrXcmvWqCgsFUyUKwzeDv8HiJhu9fC8jRAFMqxr4jj8eRTNTycmMao5wmsAScVf4jSMdPYZ",
     "keys": []
   }
-}```
+}
+```
 
 Create a new wallet with a specified ID.
 
-## HTTP Request 
+### HTTP Request 
 
 `PUT /wallet/:id` 
 
@@ -329,11 +274,12 @@ Create a new wallet with a specified ID.
 ```json 
 [
   "default"
-]```
+]
+```
 
 List all account names (array indicies map directly to bip44 account indicies).
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/account` 
 
@@ -362,11 +308,12 @@ List all account names (array indicies map directly to bip44 account indicies).
   "changeAddress": "n3nFYgQR2mrLwC3X66xHNsx4UqhS3rkSnY",
   "accountKey": "tpubDC5u44zLNUVo2gPVdqCbtX644PKccH5VZB3nqUgeCiwKoi6BQZGtr5d6hhougcD6PqjszsbR3xHrQ5k8yTbUt64aSthWuNdGi7zSwfGVuxc",
   "keys": []
-}```
+}
+```
 
 Get account info.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/account/:account` 
 
@@ -395,11 +342,12 @@ Get account info.
   "changeAddress": "mkYtQFpxDcqutMJtyzKNFPnn97zhft56wH",
   "accountKey": "tpubDC5u44zLNUVo55dtQsJRsbQgeNfrp8ctxVEdDqDQtR7ES9XG5h1SGhkv2HCuKA2RZysaFzkuy5bgxF9egvG5BJgapWwbYMU4BJ1SeSj916G",
   "keys": []
-}```
+}
+```
 
 Create account with specified account name.
 
-## HTTP Request 
+### HTTP Request 
 
 `PUT /wallet/:id/account/:name` 
 
@@ -407,7 +355,7 @@ Create account with specified account name.
 
 Change wallet passphrase. Encrypt if unencrypted.
 
-## HTTP Request 
+### HTTP Request 
 
 `POST /wallet/:id/passphrase` 
 
@@ -417,7 +365,7 @@ Derive the AES key from passphrase and hold it in memory for a specified number
 of seconds. Note: During this time, account creation and signing of
 transactions will not require a passphrase.
 
-## HTTP Request 
+### HTTP Request 
 
 `POST /wallet/:id/unlock` 
 
@@ -425,7 +373,7 @@ transactions will not require a passphrase.
 
 If unlock was called, zero the derived AES key and revert to normal behavior.
 
-## HTTP Request 
+### HTTP Request 
 
 `POST /wallet/:id/lock` 
 
@@ -434,7 +382,7 @@ If unlock was called, zero the derived AES key and revert to normal behavior.
 A rescan will be required to see any transaction history associated with the
 key.
 
-## HTTP Request 
+### HTTP Request 
 
 `POST /wallet/:id/import` 
 
@@ -445,12 +393,13 @@ key.
 ```json 
 {
   "token": "2d04e217877f15ba920d02c24c6c18f4d39df92f3ae851bec37f0ade063244b2"
-}```
+}
+```
 
 Note: if you happen to lose the returned token, you will not be able to
 access the wallet.
 
-## HTTP Request 
+### HTTP Request 
 
 `POST /wallet/:id/retoken` 
 
@@ -509,11 +458,12 @@ access the wallet.
     }
   ],
   "tx": "0100000001c5b23b4348b7fa801f498465e06f9e80cf2f61eead23028de14b67fa78df3716000000006b483045022100d3d4d945cdd85f0ed561ae8da549cb083ab37d82fcff5b9023f0cce608f1dffe02206fc1fd866575061dcfa3d12f691c0a2f03041bdb75a36cd72098be096ff62a810121021b018b19426faa59fdda7f57e68c42d925752454d9ea0d6feed8ac186074a4bcffffffff020065cd1d000000001976a91494bc546a84c481fbd30d34cfeeb58fd20d8a59bc88ac447b380c010000001976a914f4376876aa04f36fc71a2618878986504e40ef9c88ac00000000"
-}```
+}
+```
 
 Create, sign, and send a transaction.
 
-## HTTP Request 
+### HTTP Request 
 
 `POST /wallet/:id/send` 
 
@@ -562,12 +512,13 @@ Create, sign, and send a transaction.
     }
   ],
   "locktime": 0
-}```
+}
+```
 
 Create and template a transaction (useful for multisig).
 Do not broadcast or add to wallet.
 
-## HTTP Request 
+### HTTP Request 
 
 `POST /wallet/:id/create` 
 
@@ -575,7 +526,7 @@ Do not broadcast or add to wallet.
 
 Sign a templated transaction (useful for multisig).
 
-## HTTP Request 
+### HTTP Request 
 
 `POST /wallet/:id/sign` 
 
@@ -583,7 +534,7 @@ Sign a templated transaction (useful for multisig).
 
 Remove all pending transactions older than a specified age. Returns array of txids.
 
-## HTTP Request 
+### HTTP Request 
 
 `POST /wallet/:id/zap` 
 
@@ -591,7 +542,7 @@ Remove all pending transactions older than a specified age. Returns array of txi
 
 Remove a pending transaction.
 
-## HTTP Request 
+### HTTP Request 
 
 `DEL /wallet/:id/tx/:hash` 
 
@@ -599,7 +550,7 @@ Remove a pending transaction.
 
 List all block heights which contain any wallet txs.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/block` 
 
@@ -615,12 +566,13 @@ List all block heights which contain any wallet txs.
   "hashes": [
     "dd1a110edcdcbb3110a1cbe0a545e4b0a7813ffa5e77df691478205191dad66f"
   ]
-}```
+}
+```
 
 Get block info by height. Contains a list of all wallet txs included in the
 block.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/block/:height` 
 
@@ -628,7 +580,7 @@ block.
 
 Add a shared xpubkey to wallet. Must be a multisig wallet.
 
-## HTTP Request 
+### HTTP Request 
 
 `PUT /wallet/:id/shared-key` 
 
@@ -636,7 +588,7 @@ Add a shared xpubkey to wallet. Must be a multisig wallet.
 
 Remove shared xpubkey from wallet if present.
 
-## HTTP Request 
+### HTTP Request 
 
 `DEL /wallet/:id/shared-key` 
 
@@ -644,7 +596,7 @@ Remove shared xpubkey from wallet if present.
 
 Get wallet key by address.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/key/:address` 
 
@@ -652,7 +604,7 @@ Get wallet key by address.
 
 Get wallet private key (WIF format) by address.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/wif/:address` 
 
@@ -662,7 +614,7 @@ Get wallet private key (WIF format) by address.
 
 ```json 
 {
-  "network": "regtest",
+  "network": "testnet",
   "wid": 1,
   "id": "primary",
   "name": "default",
@@ -676,11 +628,12 @@ Get wallet private key (WIF format) by address.
   "program": null,
   "type": "pubkeyhash",
   "address": "mwX8J1CDGUqeQcJPnjNBG4s97vhQsJG7Eq"
-}```
+}
+```
 
 Derive new receiving address for account.
 
-## HTTP Request 
+### HTTP Request 
 
 `POST /wallet/:id/address` 
 
@@ -688,7 +641,7 @@ Derive new receiving address for account.
 
 Derive new change address for account.
 
-## HTTP Request 
+### HTTP Request 
 
 `POST /wallet/:id/change` 
 
@@ -696,7 +649,7 @@ Derive new change address for account.
 
 Derive new nested p2sh receiving address for account.
 
-## HTTP Request 
+### HTTP Request 
 
 `POST /wallet/:id/nested` 
 
@@ -711,11 +664,12 @@ Derive new nested p2sh receiving address for account.
   "account": -1,
   "unconfirmed": "8149.9999546",
   "confirmed": "8150.0"
-}```
+}
+```
 
 Get wallet or account balance.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/balance` 
 
@@ -723,7 +677,7 @@ Get wallet or account balance.
 
 List all wallet coins available.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/coin` 
 
@@ -732,11 +686,12 @@ List all wallet coins available.
 > Sample response: 
 
 ```json 
-[{"hash":"dd1a110edcdcbb3110a1cbe0a545e4b0a7813ffa5e77df691478205191dad66f","index":0}]```
+[{"hash":"dd1a110edcdcbb3110a1cbe0a545e4b0a7813ffa5e77df691478205191dad66f","index":0}]
+```
 
 Get all locked outpoints.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/locked` 
 
@@ -744,7 +699,7 @@ Get all locked outpoints.
 
 Lock outpoints.
 
-## HTTP Request 
+### HTTP Request 
 
 `PUT /wallet/:id/locked/:hash/:index` 
 
@@ -752,7 +707,7 @@ Lock outpoints.
 
 Unlock outpoints.
 
-## HTTP Request 
+### HTTP Request 
 
 `DEL /wallet/:id/locked/:hash/:index` 
 
@@ -772,11 +727,12 @@ Unlock outpoints.
     "hash": "0de09025e68b78e13f5543f46a9516fa37fcc06409bf03eda0e85ed34018f822",
     "index": 1
   }
-]```
+]
+```
 
 Get wallet coins.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/coin/:hash/:index` 
 
@@ -784,7 +740,7 @@ Get wallet coins.
 
 Get wallet TX history. Returns array of tx details.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/tx/history` 
 
@@ -792,7 +748,7 @@ Get wallet TX history. Returns array of tx details.
 
 Get pending wallet transactions. Returns array of tx details.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/tx/unconfirmed` 
 
@@ -800,7 +756,7 @@ Get pending wallet transactions. Returns array of tx details.
 
 Get range of wallet transactions by timestamp. Returns array of tx details.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/tx/range` 
 
@@ -808,7 +764,7 @@ Get range of wallet transactions by timestamp. Returns array of tx details.
 
 Get last N wallet transactions.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/tx/last` 
 
@@ -816,6 +772,7 @@ Get last N wallet transactions.
 
 Get wallet transaction details.
 
-## HTTP Request 
+### HTTP Request 
 
 `GET /wallet/:id/tx/:hash` 
+
