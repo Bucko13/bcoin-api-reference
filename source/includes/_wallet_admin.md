@@ -9,6 +9,31 @@ Replace `[TARGET_ACTION]` with one of the available actions listed below
 </aside>
 
 ## Wallet Rescan
+```shell-vars
+  height = 50000
+```
+
+```shell-curl
+  curl $url/wallet/_admin/rescan \
+    -X POST \
+    --data "{ \"height\": \"$height\"}"
+```
+
+```shell-cli
+  bcoin cli rescan $height
+```
+
+```javascript
+const height = 50000;
+const client = new bcoin.http.Client({
+    network: 'testnet',
+});
+
+(async () => {
+  await client.rescan(height);
+})();
+
+```
 
 > Response Body:
 
@@ -19,7 +44,8 @@ Replace `[TARGET_ACTION]` with one of the available actions listed below
 Initiates a blockchain rescan for the walletdb. Wallets will be rolled back to the specified height (transactions above this height will be unconfirmed).
 
 ### Example HTTP Request
-`POST /wallet/_admin/rescan`
+`POST /wallet/_admin/rescan?height=50000`
+
 
 
 ## Wallet Resend
