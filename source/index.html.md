@@ -12,6 +12,7 @@ toc_footers:
   - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
 
 includes:
+  - clients
   - node
   - coin
   - transaction
@@ -57,4 +58,8 @@ Auth is accomplished via HTTP Basic Auth, using your node's API key (passed via 
 
 <aside class="notice">
 You must replace <code>[api-key]</code> with your personal API key.
+</aside>
+
+<aside class="warning">
+If you intend to use API via network and setup <code>api-key</code>, make sure to setup <code>ssl</code> too.
 </aside>
