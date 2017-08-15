@@ -558,3 +558,4 @@ N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 1 | blockheight | Required | height of the block in the blockchain.
 2 | verbose | true | If set to false, it will return hex of the block.
+
