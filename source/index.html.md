@@ -13,6 +13,7 @@ toc_footers:
 
 includes:
   - node
+  - node_rpc
   - coin
   - transaction
   - wallet
