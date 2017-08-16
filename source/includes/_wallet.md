@@ -65,9 +65,9 @@ Note that accounts should not be accessed directly from the public API. They do 
 ```
 
 ```shell--curl
-curl http://localhost:18332/wallet/$id/send \
+curl $url/wallet/$id/send \
     -H 'Content-Type: application/json' \
-    -d '{ "token": '$token' ... }'
+    -d '{ "token": "$token" ... }'
 ```
 
 ```shell--cli
