@@ -152,3 +152,50 @@ This rpc command will remove block from invalid block set.
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 1 | blockhash | Required | Block's hash
+
+## getnetworkhashps
+
+```javascript
+let blocks, height;
+```
+
+```shell--vars
+blocks=120;
+height=1000000;
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "getnetworkhashps",
+    "params": [ "'$blocks'", "'$height'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc getnetworkhashps $blocks $height
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('getnetworkhashps', [ blocks, height ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+Returns the estimated current or historical network hashes per second, based on last `blocks`.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | blocks | 120 | Number of blocks to lookup.
+2 | height | 1 | Starting height for calculations.
