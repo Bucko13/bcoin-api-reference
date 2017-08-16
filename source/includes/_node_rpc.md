@@ -1138,3 +1138,47 @@ Returns information about UTXO's from Chain.
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 None. |
+
+## pruneblockchain
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "pruneblockchain",
+    "params": []
+  }'
+```
+
+```shell--cli
+bcoin cli rpc pruneblockchain
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('pruneblockchain');
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+Prunes the blockchain, it will keep blocks specified in Network Configurations.
+
+### Default Prune Options
+Network | keepBlocks | pruneAfter
+------- | -------    | -------
+main    | 288        | 1000
+testnet | 10000      | 1000
+regtest | 10000      | 1000
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+None. |
