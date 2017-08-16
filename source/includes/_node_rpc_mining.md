@@ -78,8 +78,15 @@ curl $url/ \
 }
 ```
 
+Long polling for new work.
+
 Returns new work, whenever new TX is received in the mempool or
 new block has been discovered. So miner can restart mining on new data.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+None. |
 
 ## getnetworkhashps
 
@@ -170,23 +177,28 @@ const rpc = new bcoin.http.RPCClient({
 
 ```json
 {
-  "blocks": 1178765,
-  "currentblocksize": 0,
-  "currentblockweight": 0,
-  "currentblocktx": 0,
-  "difficulty": 0,
+  "blocks": 1178789,
+  "currentblocksize": 11895,
+  "currentblockweight": 47580,
+  "currentblocktx": 35,
+  "difficulty": 1048576,
   "errors": "",
   "genproclimit": 0,
-  "networkhashps": 10802664115772.53,
-  "pooledtx": 27,
+  "networkhashps": 10880012194348.812,
+  "pooledtx": 34,
   "testnet": true,
   "chain": "test",
   "generate": false
 }
+
 ```
 
-Returns mining info, if you're running one.
+Returns mining info.
+
+*Note: currentblocksize, currentblockweight, currentblocktx, difficulty are returned when there's active work.*
+*generate - is true when `bcoin` itself is mining.*
 
 ### Params
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
+None. |

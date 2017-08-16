@@ -18,6 +18,7 @@ includes:
   - node_rpc_block
   - node_rpc_mempool
   - node_rpc_tx
+  - node_rpc_mining
   - coin
   - transaction
   - wallet
