@@ -50,6 +50,8 @@ method  | Name of the RPC call
 params  | Parameters accepted by method
 id      | Will be returned with the response (Shouldn't be object)
 
+
+
 ## stop
 
 ```shell--curl
@@ -89,6 +91,8 @@ Stops the running node.
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 None. |
+
+
 
 ## getblockchaininfo
 
@@ -190,8 +194,9 @@ N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 None. |
 
-## getbestblockhash
 
+
+## getbestblockhash
 
 ```shell--curl
 curl $url/ \
@@ -230,6 +235,8 @@ Returns Block Hash of the tip.
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 None. |
+
+
 
 ## getblockcount
 
@@ -271,6 +278,8 @@ Returns block count.
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 None. ||||
+
+
 
 ## getblock
 
@@ -357,6 +366,7 @@ N. | Name | Default |  Description
 3 | details | false | If set to true, it will return transaction details too.
 
 
+
 ## getblockbyheight
 
 ```javascript
@@ -441,6 +451,8 @@ N. | Name | Default |  Description
 2 | verbose | true | If set to false, it will return hex of the block.
 3 | details | false | If set to true, it will return transaction details too.
 
+
+
 ## getblockhash
 
 ```javascript
@@ -491,6 +503,8 @@ Returns block's hash by height.
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 1 | blockheight | Required | height of the block in the blockchain.
+
+
 
 ## getblockheader
 
@@ -558,6 +572,8 @@ N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 1 | blockheight | Required | height of the block in the blockchain.
 2 | verbose | true | If set to false, it will return hex of the block.
+
+
 
 ## getchaintips
 
@@ -657,6 +673,8 @@ N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 None. |
 
+
+
 ## getmempoolinfo
 
 ```shell--curl
@@ -704,6 +722,8 @@ Returns informations about mempool.
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 None. |
+
+
 
 ## getmempoolancestors
 
@@ -782,6 +802,8 @@ N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 1 | txhash | Required | Transaction Hash
 2 | verbose | false | False returns only tx hashs, true - returns dependency tx info
+
+
 
 ## getmempooldescendants
 
@@ -863,6 +885,8 @@ N. | Name | Default |  Description
 1 | txhash | Required | Transaction hash
 2 | verbose | false | False returns only tx hashs, true - returns dependency tx info
 
+
+
 ## getmempoolentry
 
 ```javascript
@@ -930,6 +954,8 @@ returns mempool transaction info by its hash.
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 1 | txhash | Required | Transaction Hash
+
+
 
 ## getrawmempool
 
@@ -1018,6 +1044,8 @@ N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 1 | verbose | false | False returns only tx hashs, true - returns full tx info
 
+
+
 ## gettxout
 
 ```javascript
@@ -1088,6 +1116,8 @@ N. | Name | Default |  Description
 2 | index | Required | Index of the Outpoint tx.
 3 | includemempool | true | Whether to include mempool transactions.
 
+
+
 ## gettxoutsetinfo
 
 ```shell--curl
@@ -1139,6 +1169,8 @@ N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 None. |
 
+
+
 ## pruneblockchain
 
 ```shell--curl
@@ -1182,3 +1214,112 @@ regtest | 10000      | 1000
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 None. |
+
+
+
+## verifychain
+
+Not implemented.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | checklevel | Required | Level of verification
+1 | numblocks | Required | Number of blocks to verify
+
+
+
+## invalidateblock
+
+```javascript
+let blockhash;
+```
+
+```shell--vars
+blockhash='0000000000000dca8da883af9515dd90443d59139adbda3f9eeac1d18397fec3';
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "invalidateblock",
+    "params": [ "'$blockhash'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc invalidateblock $blockhash
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('invalidateblock', [ blockhash ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+
+Invalidates the block in the chain.
+It will rewind network to blockhash and invalidate it. 
+
+It won't accept that block as valid
+*Invalidation will work while running, restarting node will remove invalid block from list.*
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | blockhash | Required | Block's hash
+
+## reconsiderblock
+
+```javascript
+let blockhash;
+```
+
+```shell--vars
+blockhash='0000000000000dca8da883af9515dd90443d59139adbda3f9eeac1d18397fec3';
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "reconsiderblock",
+    "params": [ "'$blockhash'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc reconsiderblock $blockhash
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('reconsiderblock', [ blockhash ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+This rpc command will remove block from invalid block set.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | blockhash | Required | Block's hash
