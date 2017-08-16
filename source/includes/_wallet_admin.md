@@ -1,4 +1,4 @@
-# Wallet Admin API
+# Wallet Admin
 The _admin namespace exists to differentiate administrative level tasks on the wallet API that you probably don't want to expose to individual wallets. 
 
 `/wallet/_admin/[TARGET_ACTION]`

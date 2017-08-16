@@ -1,4 +1,4 @@
-# Wallet API
+# Wallet
 ## The WalletDB and Object
 
 > The wallet object will look something like this:
@@ -178,19 +178,32 @@ Parameters | Description
 ---------- | -----------
 id <br> _string_ | named id of the wallet whose info you would like to retrieve
 
-##GET /wallet/:id 
+## Get Master HD Key
+```javascript
+  let id;
+  let network;
+```
+```shell-vars
+  id='test'
+  network='testnet'
+```
 
-> Sample response: 
+```shell-curl
+ curl $url/wallet/$id/master
+```
 
+```shell-cli
+  bcoin cli wallet master --id=$id --network=$network
+```
 
+```javascript
+  const wallet = new bcoin.http.Wallet({ id: id,  network: network});
 
-Get wallet info by ID.
-
-### HTTP Request 
-
-`GET /wallet/:id` 
-
-##GET /wallet/:id/master 
+  (async() => {
+    const master = await wallet.getMaster();
+    console.log(master);
+  })();
+``` 
 
 > Sample response: 
 
@@ -214,7 +227,11 @@ Get wallet master HD key. This is normally censored in the wallet info route. Th
 
 ### HTTP Request 
 
-`GET /wallet/:id/master` 
+`GET /wallet/:id/master`
+
+Parameters | Description
+---------- | -----------
+id <br> _string_ | named id of the wallet whose info you would like to retrieve 
 
 ##PUT /wallet/:id 
 
