@@ -359,13 +359,60 @@ See <a href="#wallet-options">Wallet Options</a> for full list and description o
 </aside> 
 
 
-##POST /wallet/:id/passphrase 
+## Change Passphrase
+```javascript
+  let id;
+  let oldPass;
+  let newPass;
+```
 
-Change wallet passphrase. Encrypt if unencrypted.
+```shell--vars
+  id='test'
+  oldPass = 'oldpass123'
+  newPass='newpass123'
+```
+
+```shell--cli
+  # No command available
+```
+
+```shell-curl
+  curl $url/wallet/$id/passphrase \
+    -X POST
+    --data '{"old":'$oldPass', "new":'$newPass'}'
+```
+
+```javascript
+  const client = new bcoin.http.CLient();
+
+  (async () => {
+    const response = await client.setPassphrase(id, oldPass, newPass);
+    console.log(response);
+  });
+```
+
+> Sample Response:
+
+```json
+  {"success": true}
+```
 
 ### HTTP Request 
 
 `POST /wallet/:id/passphrase` 
+
+### Post Parameters
+Paramters | Description
+--------- | ---------------------
+old <br> _string_ | Old passphrase. Pass in empty string if none
+passphrase <br> _string | New passphrase
+
+Change wallet passphrase. Encrypt if unencrypted.
+
+<aside class="notice">
+  Note that the old passphrase is still required even if none was set prior. In this case, an empty string should be passed for the old passphrase.
+  e.g. <code>client.setPassphrase(id,'""', 'newPass')</code>
+</aside>
 
 ##POST /wallet/:id/unlock 
 
