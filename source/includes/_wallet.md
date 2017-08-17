@@ -54,6 +54,39 @@ Each account can be of a different type. You could have a pubkeyhash account, as
 
 Note that accounts should not be accessed directly from the public API. They do not have locks which can lead to race conditions during writes.
 
+## Wallet Options
+> Wallet options object will look something like this
+
+```json
+  {
+    "id": "walletId",
+    "witness": true,
+    "watchOnly": false,
+    "accountKey": key,
+    "accountIndex": 1,
+    "type": "pubkeyhash"
+    "m": 1, 
+    "n": 1,
+    "keys": [],
+    "mnemonic": 'differ trigger sight sun undo fine sheriff mountain prison remove fantasy arm'
+  }
+```
+Options are used for wallet creation. None are required. 
+
+### Options Object
+Name | Type | Default | Description
+---------- | ----------- | -------------- | -------------
+id | String |  | Wallet ID (used for storage)
+master | HDPrivateKey/HDPublicKey | | | Master HD key. If not present, it will be generated
+witness | Boolean | `false` | Whether to use witness programs
+accountIndex | Number | `0` | The BIP44 [account index](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#Account)
+receiveDepth | Number | | The index of the _next_ receiveing address
+changeDepth | Number | | The index of the _next_ change address
+type | String | `'pubkeyhash'` |Type of wallet (pubkeyhash, multisig)
+compressed | Boolean | `true` | Whether to use compressed public keys
+m | Number | `1` | m value for multisig (`m-of-n`)
+n | Number | `1` | n value for multisig (`m-of-n`)
+mnemonic | String | | A mnemonic phrase to use to instantiate an hd private key. One will be generated if none provided
 
 
 ## Wallet Auth
@@ -183,16 +216,16 @@ id <br> _string_ | named id of the wallet whose info you would like to retrieve
   let id;
   let network;
 ```
-```shell-vars
+```shell--vars
   id='test'
   network='testnet'
 ```
 
-```shell-curl
+```shell--curl
  curl $url/wallet/$id/master
 ```
 
-```shell-cli
+```shell--cli
   bcoin cli wallet master --id=$id --network=$network
 ```
 
@@ -231,9 +264,42 @@ Get wallet master HD key. This is normally censored in the wallet info route. Th
 
 Parameters | Description
 ---------- | -----------
-id <br> _string_ | named id of the wallet whose info you would like to retrieve 
+id <br> _string_ | named id of the wallet whose info you would like to retrieve
 
-##PUT /wallet/:id 
+## Create New Wallet
+
+```javascript
+  let id;
+  let witness;
+```
+
+```shell--vars
+  id = 'foo'
+  witness = false
+```
+
+```shell--curl
+  curl $url/wallet/$id \
+    -X PUT \
+    --data '{"witness":'$witness'}' 
+```
+
+```shell--cli
+  bcoin cli wallet create $id --witness=$witness
+```
+
+```javascript
+  const client = new bcoin.http.Client();
+  const options = {
+    id: id,
+    witness: witness
+  };
+
+  (async () => {
+    const newWallet = await client.createWallet(options)
+  })(); 
+
+```
 
 > Sample response: 
 
@@ -284,7 +350,24 @@ Create a new wallet with a specified ID.
 
 `PUT /wallet/:id` 
 
-##GET /wallet/:id/account 
+Parameters | Description
+---------- | -----------
+id <br> _string_ | id of wallet you would like to create
+
+<aside class="notice">
+See <a href="#wallet-options">Wallet Options</a> for full list and description of possible options that can be passed
+</aside> 
+
+
+## Get Wallet Account List
+
+```shell--vars
+  id='test' 
+```
+
+```shell--cli
+  bcoin cli wallet account list --id=$id
+```
 
 > Sample response: 
 
@@ -294,20 +377,50 @@ Create a new wallet with a specified ID.
 ]
 ```
 
-List all account names (array indicies map directly to bip44 account indicies).
+List all account names (array indicies map directly to bip44 account indicies) associated with a specific wallet id.
 
 ### HTTP Request 
 
-`GET /wallet/:id/account` 
+`GET /wallet/:id/account`
 
-##GET /wallet/:id/account/:account 
+<aside class="notice">
+Note that command defaults to primary (default) wallet if no wallet id is passed
+</aside>
+
+## Get Account Information
+```javascript
+  let id;
+  let account
+```
+
+```shell--vars
+  id='test'
+  account='default'
+```
+
+```shell--curl
+  curl $url/wallet/$id/account/$account
+  
+```
+
+```shell--cli
+  bcoin cli wallet --id=$id account get $account
+```
+
+```javascript
+  const client = new bcoin.http.Client();
+  (async () => {
+    const accountInfo = client.getAccount(id, account);
+    console.log(accountInfo);
+  })();
+```
 
 > Sample response: 
 
 ```json 
 {
   "wid": 1,
-  "id": "primary",
+  "id": "test",
   "name": "default",
   "initialized": true,
   "witness": false,
@@ -333,6 +446,11 @@ Get account info.
 ### HTTP Request 
 
 `GET /wallet/:id/account/:account` 
+
+Parameters | Description
+---------- | -----------
+id <br> _string_ | id of wallet you would like to query
+account <br> _string_ | id of account you would to retrieve information for
 
 ##PUT /wallet/:id/account/:name 
 
