@@ -14,6 +14,7 @@ toc_footers:
 includes:
   - node
   - node_rpc
+  - node_rpc_general
   - node_rpc_chain
   - node_rpc_block
   - node_rpc_mempool
