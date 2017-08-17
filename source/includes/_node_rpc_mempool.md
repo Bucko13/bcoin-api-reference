@@ -367,3 +367,224 @@ N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 1 | verbose | false | False returns only tx hashs, true - returns full tx info
 
+
+
+
+## estimatefee
+
+```javascript
+let nblocks;
+```
+
+```shell--vars
+nblocks=10;
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "estimatefee",
+    "params": [ "'$nblocks'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc estimatefee $nblocks
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('estimatefee', [ nblocks ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+0.001
+```
+
+Estimates fee to be paid for transaction.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | nblocks | 1 | Number of blocks to check for estimation.
+
+
+
+## estimatepriority
+
+```javascript
+let nblocks;
+```
+
+```shell--vars
+nblocks=10;
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "estimatepriority",
+    "params": [ "'$nblocks'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc estimatepriority $nblocks
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('estimatepriority', [ nblocks ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+718158904.3501
+```
+
+estimates the priority (coin age) that a transaction needs in order to be included within a certain number of blocks as a free high-priority transaction.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | nblocks | 1 | Number of blocks to check for estimation.
+
+
+
+## estimatesmartfee
+
+```javascript
+let nblocks;
+```
+
+```shell--vars
+nblocks=10;
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "estimatesmartfee",
+    "params": [ "'$nblocks'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc estimatesmartfee $nblocks
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('estimatesmartfee', [ nblocks ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+{
+  "fee": 0.001,
+  "blocks": 10
+}
+```
+
+Estimates smart fee to be paid for transaction.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | nblocks | 1 | Number of blocks to check for estimation.
+
+
+
+## estimatesmartpriority
+
+```javascript
+let nblocks;
+```
+
+```shell--vars
+nblocks=10;
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "estimatesmartpriority",
+    "params": [ "'$nblocks'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc estimatesmartpriority $nblocks
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('estimatesmartpriority', [ nblocks ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+{
+  "priority": 718158904.3501,
+  "blocks": 10
+}
+```
+
+estimates smart priority (coin age) that a transaction needs in order to be included within a certain number of blocks as a free high-priority transaction.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | nblocks | 1 | Number of blocks to check for estimation.
+
+
+
