@@ -17,6 +17,7 @@ includes:
   - transaction
   - wallet_admin
   - wallet
+  - wallet_accounts
   - errors
 
 search: true

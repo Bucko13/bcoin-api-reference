@@ -19,7 +19,7 @@ Replace `[TARGET_ACTION]` with one of the available actions listed below
 ```shell--curl
   curl $url/wallet/_admin/rescan \
     -X POST \
-    --data "{ \"height\": \"$height\"}"
+    --data '{"height": '$height'}'
 ```
 
 ```shell--cli
