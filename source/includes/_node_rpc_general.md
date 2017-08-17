@@ -222,3 +222,59 @@ N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 1 | nrequired | Required | Required number of approvals for spending
 2 | keyArray  | Required | Array of public keys
+
+
+
+## createwitnessaddress
+
+```javascript
+let script;
+```
+
+```shell--vars
+script='5221021f1dbc575db95a44e016fe6ecf00231109e7799d9b1e007dbe8814017cf0d65c2102b3280e779a7c849f9d6460e926097fe4b0f6280fa6fd038ce8e1236a4688c358210315613667e3ebe065c0b8d86ae0443d97de56545bdf38c99a6ee584f300206d9a53ae';
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "createwitnessaddress",
+    "params": [ "'$script'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc createwitnessaddress $script
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('createwitnessaddress', [ script ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+{
+  "address": "tb1qlfgqame3n0dt2ldjl2m9qjg6n2vut26jw3ezm25hqx9ez4m9wp5q567kg2",
+  "witnessScript": "0020fa500eef319bdab57db2fab650491a9a99c5ab5274722daa97018b9157657068"
+}
+```
+
+Creates witness address.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | script | Required | Bitcoin script.
