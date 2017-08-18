@@ -390,3 +390,55 @@ N. | Name | Default |  Description
 1 | address | Required | Address of the signer
 2 | signature | Required | Signature of signed message
 3 | message | Required | Message that was signed
+
+## setmocktime
+
+```javascript
+let timestamp;
+```
+
+```shell--vars
+timestamp=1503058155;
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "setmocktime",
+    "params": [ '$timestamp' ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc setmocktime $timestamp
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('setmocktime', [ timestamp ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+null
+```
+
+
+Changes network time (This is consensus-critical)
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | timestamp | Required | timestamp to change to
