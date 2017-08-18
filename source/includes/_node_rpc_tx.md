@@ -466,6 +466,19 @@ Note: Transaction in example doesn't spacify change output,
 you can do it by specifying another <code>address: amount</code> pair.
 </aside>
 
+Creates raw transaction without any verification and without sign.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | outpoints | Required | Outpoint list
+1.1 | txid | | Transaction Hash
+1.2 | vout | | Transaction Outpoint Index
+1.3 | sequence | | Sequence number for input
+2 | sendto | Required | List of addresses with amounts that we are sending to.
+2.1 | address | 0 | `address: amount` key pairs
+2.2 | data | nullData | Data output
+3 | locktime | | earliest time a transaction can be added
 
 
 ## signrawtransaction
@@ -538,3 +551,17 @@ const rpc = new bcoin.http.RPCClient({
   "complete": true
 }
 ```
+
+Signs raw transaction
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | rawtx | Required | raw tx
+2 | inputs | Required | Coins you're going to spend
+2.1 | txid | | Transaction Hash
+2.2 | vout | | Transaction Outpoint Index
+2.3 | scriptPubKey | | script with pubkey you are going to sign
+2.4 | redeemScript | | redeemScript if tx is P2SH
+3 | privkeylist | | List of private keys
+4 | sighashtype | | Type of signature hash
