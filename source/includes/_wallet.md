@@ -213,8 +213,8 @@ id <br> _string_ | named id of the wallet whose info you would like to retrieve
 
 ## Get Master HD Key
 ```javascript
-  let id;
-  let network;
+  let id
+  let network
 ```
 ```shell--vars
   id='test'
@@ -269,8 +269,8 @@ id <br> _string_ | named id of the wallet whose info you would like to retrieve
 ## Create New Wallet
 
 ```javascript
-  let id;
-  let witness;
+  let id
+  let witness
 ```
 
 ```shell--vars
@@ -361,9 +361,9 @@ See <a href="#wallet-options">Wallet Options</a> for full list and description o
 
 ## Change Passphrase
 ```javascript
-  let id;
-  let oldPass;
-  let newPass;
+  let id
+  let oldPass
+  let newPass
 ```
 
 ```shell--vars
@@ -373,7 +373,7 @@ See <a href="#wallet-options">Wallet Options</a> for full list and description o
 ```
 
 ```shell--cli
-  # No command available
+  > No command available
 ```
 
 ```shell-curl
@@ -397,6 +397,8 @@ See <a href="#wallet-options">Wallet Options</a> for full list and description o
   {"success": true}
 ```
 
+Change wallet passphrase. Encrypt if unencrypted.
+
 ### HTTP Request 
 
 `POST /wallet/:id/passphrase` 
@@ -407,22 +409,60 @@ Paramters | Description
 old <br> _string_ | Old passphrase. Pass in empty string if none
 passphrase <br> _string | New passphrase
 
-Change wallet passphrase. Encrypt if unencrypted.
-
 <aside class="notice">
   Note that the old passphrase is still required even if none was set prior. In this case, an empty string should be passed for the old passphrase.
   e.g. <code>client.setPassphrase(id,'""', 'newPass')</code>
 </aside>
 
-##POST /wallet/:id/unlock 
 
-Derive the AES key from passphrase and hold it in memory for a specified number
-of seconds. Note: During this time, account creation and signing of
-transactions will not require a passphrase.
+## Unlock Wallet
+
+```javascript
+  let id
+  let pass
+  let timeout
+```
+
+```shell--vars
+  id='test'
+  pass='foo'
+  timeout=60
+```
+
+```shell--cli
+  bcoin cli wallet unlock --id=$id $pass 
+```
+
+```shell--curl
+  curl $url/wallet/$id/unlock \
+    -X POST
+    --data '{"passphrase":'$pass', "timeout": '$timeout'}'
+```
+
+```javascript
+  const client = new bcoin.http.Client();
+  (async () => {
+    const response = await client.unlock(id, pass, timeout);
+    console.log(response);
+  })();
+```
+> Sample Response
+
+```json
+  {"success": true}
+```
+
+Derive the AES key from passphrase and hold it in memory for a specified number of seconds. Note: During this time, account creation and signing of transactions will not require a passphrase.
 
 ### HTTP Request 
 
-`POST /wallet/:id/unlock` 
+`POST /wallet/:id/unlock`
+
+### Post Parameters
+Parameter | Description
+--------- | -----------------------
+passphrase <br> _string_ | Password used to encrypt the wallet being unlocked
+timeout <br> _number> | time to re-lock the wallet in seconds. (default=60)
 
 ##POST /wallet/:id/lock 
 

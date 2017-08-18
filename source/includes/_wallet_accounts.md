@@ -26,8 +26,8 @@
   } 
 
 ```
-
-Accounts are another level of separation within BIP44 HD wallets. 
+Represents a BIP44 Account belonging to a Wallet.
+Note that this object does not enforce locks. Any method that does a write is internal API only and will lead to race conditions if used elsewhere.
 
 From the [BIP44 Specification](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki):
 
