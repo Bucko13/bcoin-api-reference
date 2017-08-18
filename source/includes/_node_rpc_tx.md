@@ -545,6 +545,8 @@ const rpc = new bcoin.http.RPCClient({
 });
 ```
 
+> The above command returns JSON "result" like this:
+
 ```json
 {
   "hex": "01000000012f05b76c513901b7e9ca6dd36796f9e5370625dda51321de2a4d8cffa8b6e1d1010000006b48304502210094252b4db106def63264668717c5ad66e2804c5e1b390c6240e82515fb0c12690220708430b14ceb0a15308e665de21cb3eb9e6cd9e4571e110fbfddf65ef702cd990121035ef2bf6d09a343c4c0be6fb5b489b217c00f477a9878b60ca3ceca4c2b052c3cffffffff020000000000000000026a0000e1f505000000001976a914c1325e8fb60bd71d23532c39b4c9e743a2cc764988ac00000000",
@@ -565,3 +567,112 @@ N. | Name | Default |  Description
 2.4 | redeemScript | | redeemScript if tx is P2SH
 3 | privkeylist | | List of private keys
 4 | sighashtype | | Type of signature hash
+
+
+
+## gettxoutproof
+
+```javascript
+let txhash;
+```
+
+```shell--vars
+txhash='c75f8c12c6d0d1a16d7361b724898968c71de0335993ee589f82fda8ac482bfc';
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "gettxoutproof",
+    "params": [ "'$txhash'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc gettxoutproof $txhash
+```
+
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('gettxoutproof', [ txhash ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+"000000208c13da491196839dd019c4ae0564f351502a4951e11b4302454b020000000000f1788fd057d657150b12e5638c7348fb55fdcda4ff4ddb1d1503de3576de6a4cbe22db58f0ec091b918981c50200000001f1788fd057d657150b12e5638c7348fb55fdcda4ff4ddb1d1503de3576de6a4c0100"
+```
+
+Checks if transactions are within block.
+Returns raw block.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | txidlist | Required | array of transaction hashes
+2 | blockhash | Based on TX | Block hash
+
+
+## verifytxoutproof
+
+```javascript
+let proof;
+```
+
+```shell--vars
+proof='000000208c13da491196839dd019c4ae0564f351502a4951e11b4302454b020000000000f1788fd057d657150b12e5638c7348fb55fdcda4ff4ddb1d1503de3576de6a4cbe22db58f0ec091b918981c50200000001f1788fd057d657150b12e5638c7348fb55fdcda4ff4ddb1d1503de3576de6a4c0100';
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "verifytxoutproof",
+    "params": [ "'$proof'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc verifytxoutproof $proof
+```
+
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('verifytxoutproof', [ proof ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+[]
+```
+
+Checks the proof for transaction inclusion.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | proof | Required | Proof of transaction inclusion.
