@@ -466,6 +466,36 @@ timeout <br> _number> | time to re-lock the wallet in seconds. (default=60)
 
 ##POST /wallet/:id/lock 
 
+```javascript
+  let id
+```
+
+```shell--vars
+  id='test'
+```
+
+```shell--cli
+  bcoin cli wallet lock --id=$id
+```
+
+```shell--curl
+  curl $url/wallet/$id/lock \
+    -X POST
+```
+
+```javascript
+  const client = new bcoin.http.Client();
+  (async () => {
+    const response = await client.lock(id);
+    console.log(response);
+  })();
+```
+> Sample Response
+
+```json
+  {"success": true}
+```
+
 If unlock was called, zero the derived AES key and revert to normal behavior.
 
 ### HTTP Request 
