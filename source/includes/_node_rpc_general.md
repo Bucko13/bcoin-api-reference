@@ -278,3 +278,115 @@ Creates witness address.
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 1 | script | Required | Bitcoin script.
+
+
+
+## signmessagewithprivkey
+
+```javascript
+let privkey, message;
+```
+
+```shell--vars
+privkey='EL4QU6ViZvT4RuCTCivw2uBnvBPSamP5jMtH31gGQLbEEcmNCHVz';
+message='hello';
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "signmessagewithprivkey",
+    "params": [ "'$privkey'", "'$message'"]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc signmessagewithprivkey $privkey $message
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('signmessagewithprivkey', [ privkey, message ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+"MEQCIAwF9NPMo5KBRsCWTBJ2r69/h7CfDl+RQfxxwAbNp1WJAiAiubiK5rg9MugiU7EHpwbJLc3b356LAedob0ePI40Wmg=="
+```
+
+
+Signs message with private key.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | privkey | Required | Private key
+1 | message | Required | Message you want to sign.
+
+
+## verifymessage
+
+```javascript
+let address, signature, message;
+```
+
+```shell--vars
+address='R9LTC6Sp6Zwk71qUrm81sEdsppFNiDM6mF';
+signature='MEQCIAwF9NPMo5KBRsCWTBJ2r69/h7CfDl+RQfxxwAbNp1WJAiAiubiK5rg9MugiU7EHpwbJLc3b356LAedob0ePI40Wmg==';
+message='hello';
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "verifymessage",
+    "params": [ "'$address'", "'$signature'", "'$message'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc verifymessage $address $signature $message 
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('verifymessage', [ address, signature, message ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+true
+```
+
+Verify sign
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | address | Required | Address of the signer
+2 | signature | Required | Signature of signed message
+3 | message | Required | Message that was signed
