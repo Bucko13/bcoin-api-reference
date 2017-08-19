@@ -403,7 +403,7 @@ Change wallet passphrase. Encrypt if unencrypted.
 
 `POST /wallet/:id/passphrase` 
 
-### Post Parameters
+### Body Parameters
 Paramters | Description
 --------- | ---------------------
 old <br> _string_ | Old passphrase. Pass in empty string if none
@@ -430,7 +430,7 @@ passphrase <br> _string | New passphrase
 ```
 
 ```shell--cli
-  bcoin cli wallet unlock --id=$id $pass 
+  bcoin cli wallet unlock --id=$id $pass $timeout
 ```
 
 ```shell--curl
@@ -458,13 +458,13 @@ Derive the AES key from passphrase and hold it in memory for a specified number 
 
 `POST /wallet/:id/unlock`
 
-### Post Parameters
+### Body Parameters
 Parameter | Description
 --------- | -----------------------
 passphrase <br> _string_ | Password used to encrypt the wallet being unlocked
 timeout <br> _number> | time to re-lock the wallet in seconds. (default=60)
 
-##POST /wallet/:id/lock 
+## Lock Wallet 
 
 ```javascript
   let id
@@ -502,16 +502,138 @@ If unlock was called, zero the derived AES key and revert to normal behavior.
 
 `POST /wallet/:id/lock` 
 
-##POST /wallet/:id/import 
+## Import Public/Private Key
+
+```javascript
+  let id
+  let account
+  let key
+```
+
+```shell--vars
+  id='test'
+  account='test-acount'
+  key='0215a9110e2a9b293c332c28d69f88081aa2a949fde67e35a13fbe19410994ffd9'
+```
+
+```shell--cli
+  bcoin cli wallet import --id=$id $key
+```
+
+```shell--curl
+  curl $url/wallet/$id/import \
+    -X POST \
+    --data '{"account":'$account', "privateKey":'$key'}'
+```
+
+```javascript
+  const wallet = new bcoin.http.Wallet({ id: id });
+  (async () => {
+    const response = await wallet.importKey(account, key);
+    console.log(response);
+  })();
+```
+
+Import a standard WIF key. 
+
+An import can be either a private key or a public key for watch-only. (Watch Only wallets will throw an error if trying to import a private key)
 
 A rescan will be required to see any transaction history associated with the
 key.
+
+<aside class="warning">
+Note that imported keys do not exist anywhere in the wallet's HD tree. They can be associated with accounts but will not be properly backed up with only the mnemonic.
+</aside>
 
 ### HTTP Request 
 
 `POST /wallet/:id/import` 
 
-##POST /wallet/:id/retoken 
+### Body Paramters
+Paramter | Description
+-------- | -------------------------
+id <br> _string_ | id of target wallet to import key into
+privateKey <br> _string_ | Base58Check encoded private key
+publicKey <br> _string_ | Hex encoded public key
+
+> Will return following error if incorrectly formatted:
+`Bad key for import`
+
+## Import Address
+```javascript
+  let id
+  let account
+  let address
+```
+
+```shell--vars
+  id='foo'
+  account='bar'
+  address='moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA'
+```
+
+```shell--cli
+  bcoin cli wallet watch --id=$id --account=$account $address
+```
+
+```shell--curl
+  curl $url/wallet/$id/import
+    -X POST
+    --data '{"account":'$account', "address":'$address'}'
+```
+
+```javascript
+  const wallet = new bcoin.http.Wallet({ id: id });
+
+  (async () => {
+    const response = await wallet.importAddress(id, account, address)
+  })();
+```
+
+Import a Base58Check encoded address. Addresses (like public keys) can only be imported into watch-only wallets
+
+The HTTP endpoint is the same as for key imports.
+
+### HTTP Request 
+
+`POST /wallet/:id/import` 
+
+### Body Paramters
+Paramter | Description
+-------- | -------------------------
+id <br> _string_ | id of target wallet to import key into
+address <br> _string_ | Base58Check encoded address
+
+
+## Reset Authentication Token
+```javascript
+  let id
+  let passphrase
+```
+
+```shell--vars
+  id='foo'
+  passphrase="bar"
+```
+
+```shell--cli
+  bcoin cli wallet retoken --id=$id --passphrase=$passphrase
+```
+
+```shell--curl
+  curl $url/wallet/$id/retoken \
+    -X POST
+    --data '{"passphrase":'$passphrase'}"
+```
+
+```javascript
+  const wallet = new bcoin.http.Wallet({ id: id });
+
+  (async () => { 
+    const token = await wallet.retoken(passphrase);
+    console.log(token);
+  })();
+```
 
 > Sample response: 
 
@@ -521,8 +643,12 @@ key.
 }
 ```
 
-Note: if you happen to lose the returned token, you will not be able to
-access the wallet.
+Derive a new wallet token, required for access of this particular wallet.
+
+<aside class="warning">
+Note: if you happen to lose the returned token, you will not be able to access the wallet.
+</aside>
+
 
 ### HTTP Request 
 
