@@ -20,6 +20,7 @@ includes:
   - node_rpc_mempool
   - node_rpc_tx
   - node_rpc_mining
+  - node_rpc_network
   - coin
   - transaction
   - wallet
