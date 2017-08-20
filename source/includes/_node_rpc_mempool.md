@@ -369,6 +369,65 @@ N. | Name | Default |  Description
 
 
 
+## prioritisetransaction
+
+```javascript
+let txhash, priorityDelta, feeDelta;
+```
+
+```shell--vars
+txhash='';
+priorityDelta=1000;
+feeDelta=1000;
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "prioritisetransaction",
+    "params": [ "'$txhash'", "'$priorityDelta'", "'$feeDelta'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc prioritisetransaction $txhash $priorityDelta $feeDelta
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('prioritisetransaction', [ txhash, priorityDelta, feeDelta ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+true
+```
+
+Prioritises the transaction.
+
+*Note: changing fee or priority will only trick local miner (using this mempool)
+into accepting Transaction(s) into the block. (even if Priority/Fee doen't qualify)*
+
+
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | txid | Required | Transaction hash
+2 | priority delta | Required | Virtual priority to add/subtract to the entry
+3 | fee delta | Required | Virtual fee to add/subtract to the entry
+
+
 
 ## estimatefee
 
