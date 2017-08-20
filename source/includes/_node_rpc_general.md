@@ -43,7 +43,6 @@ None. |
 ## getinfo
 
 ```shell--curl
-# Will return once all blocks are mined.
 curl $url/ \
   -H 'Content-Type: application/json' \
   -X POST \
@@ -101,6 +100,101 @@ Returns general info
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 None. |
+
+
+
+## getmemoryinfo
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "getmemoryinfo",
+    "params": []
+  }'
+```
+
+```shell--cli
+bcoin cli rpc getmemoryinfo
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('getmemoryinfo');
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+{
+  "total": 99,
+  "jsHeap": 19,
+  "jsHeapTotal": 29,
+  "nativeHeap": 69,
+  "external": 10
+}
+```
+
+Returns Memory usage info.
+
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+None. |
+
+
+
+## setloglevel
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "setloglevel",
+    "params": [ "none" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc setloglevel none
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('setloglevel', [ 'none' ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+null
+```
+
+Change Log level of the running node.
+
+Levels are: `NONE`, `ERROR`, `WARNING`, `INFO`, `DEBUG`, `SPAM`
+`
 
 
 
