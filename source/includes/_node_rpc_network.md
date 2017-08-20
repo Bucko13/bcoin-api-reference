@@ -218,3 +218,236 @@ Command | Description
 add | Adds node to Host List and connects to it
 onetry | Tries to connect to the given node
 remove | Removes node from host list
+
+
+
+## disconnectnode
+
+```javascript
+let nodeAddr;
+```
+
+```shell--vars
+nodeAddr='198.51.100.82:18333';
+```
+
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "disconnectnode",
+    "params": [ "'$nodeAddr'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc disconnectnode $nodeAddr
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('disconnectnode', [ nodeAddr ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+null
+```
+
+Disconnects node.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | addr | Required | IP Address of the Node.
+
+
+
+## getaddednodeinfo
+
+```javascript
+let nodeAddr;
+```
+
+```shell--vars
+nodeAddr='198.51.100.82:18333';
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "getaddednodeinfo",
+    "params": [ "'$nodeAddr'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc getaddednodeinfo $nodeAddr
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('getaddednodeinfo', [ nodeAddr ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+[
+  {
+    "addednode": "198.51.100.82:18333",
+    "connected": true,
+    "addresses": [
+      {
+        "address": "198.51.100.82:18333",
+        "connected": "outbound"
+      }
+    ]
+  }
+]
+```
+
+Returns node information from host list.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | addr | Required | IP Address of the Node.
+
+
+
+## getnettotals
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "getnettotals",
+    "params": []
+  }'
+```
+
+```shell--cli
+bcoin cli rpc getnettotals
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('getnettotals');
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+{
+  "totalbytesrecv": 370598,
+  "totalbytessent": 110058,
+  "timemillis": 1503262547279
+}
+```
+
+Returns information about used network resources.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+None |
+
+
+
+## getnetworkinfo
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "getnetworkinfo",
+    "params": []
+  }'
+```
+
+```shell--cli
+bcoin cli rpc getnetworkinfo
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('getnetworkinfo');
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+
+> The above command returns JSON "result" like this:
+
+```json
+{
+  "version": "v1.0.0-beta.14",
+  "subversion": "/bcoin:v1.0.0-beta.14/",
+  "protocolversion": 70015,
+  "localservices": "00000009",
+  "localrelay": true,
+  "timeoffset": -1,
+  "networkactive": true,
+  "connections": 8,
+  "networks": [],
+  "relayfee": 0.00001,
+  "incrementalfee": 0,
+  "localaddresses": [
+    {
+      "address": "203.0.113.114",
+      "port": 18333,
+      "score": 3
+    }
+  ],
+  "warnings": ""
+}
+```
+
+Returns local node's network information
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+None |
