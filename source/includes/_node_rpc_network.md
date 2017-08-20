@@ -82,7 +82,7 @@ Will send ping request to every connected peer.
 ### Params
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
-None
+None. |
 
 
 
@@ -153,7 +153,7 @@ Returns information about all connected peers.
 ### Params
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
-None
+None. |
 
 
 
@@ -384,7 +384,7 @@ Returns information about used network resources.
 ### Params
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
-None |
+None. |
 
 
 
@@ -450,4 +450,163 @@ Returns local node's network information
 ### Params
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
-None |
+None. |
+
+
+
+## setban
+
+```javascript
+let nodeAddr, cmd;
+```
+
+```shell--vars
+nodeAddr='198.51.100.82:18333';
+cmd='add'
+```
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "setban",
+    "params": [ "'$nodeAddr'", "'$cmd'" ]
+  }'
+```
+
+```shell--cli
+bcoin cli rpc setban $nodeAddr $cmd
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('setban', [ nodeAddr, cmd ]);
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+null
+```
+
+Adds or removes nodes from banlist.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | addr | Required | IP Address of the Node.
+2 | cmd | Required | Command
+
+### Commands
+Command | Description
+---- | ----
+add | Adds node to ban list, removes from host list, disconnects.
+remove | Removes node from ban list
+
+
+
+## listbanned
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "listbanned",
+    "params": []
+  }'
+```
+
+```shell--cli
+bcoin cli rpc listbanned
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('listbanned');
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+[
+  {
+    "address": "198.51.100.82:18333",
+    "banned_until": 1503349501,
+    "ban_created": 1503263101,
+    "ban_reason": ""
+  },
+  ...
+]
+```
+
+Lists all banned peers.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+None. |
+
+
+
+## clearbanned
+
+```shell--curl
+curl $url/ \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  --data '{
+    "method": "clearbanned",
+    "params": []
+  }'
+```
+
+```shell--cli
+bcoin cli rpc clearbanned
+```
+
+```javascript
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('clearbanned');
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
+```
+
+> The above command returns JSON "result" like this:
+
+```json
+null
+```
+
+Removes all banned peers.
+
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+None. |
