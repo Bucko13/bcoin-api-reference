@@ -194,8 +194,11 @@ null
 Change Log level of the running node.
 
 Levels are: `NONE`, `ERROR`, `WARNING`, `INFO`, `DEBUG`, `SPAM`
-`
 
+### Params
+N. | Name | Default |  Description
+--------- | --------- | --------- | -----------
+1 | level | Required | Level for the logger
 
 
 ## validateaddress
