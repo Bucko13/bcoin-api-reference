@@ -1,3 +1,5 @@
+# RPC Calls - Chain
+
 ## pruneblockchain
 
 ```shell--curl

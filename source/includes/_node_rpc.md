@@ -1,4 +1,4 @@
-# Node RPC Calls
+# RPC Calls - Node
 
 ```shell--curl
 curl $url/ \

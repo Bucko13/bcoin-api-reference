@@ -1,3 +1,5 @@
+# RPC Calls - Block
+
 ## getblockchaininfo
 
 ```shell--curl

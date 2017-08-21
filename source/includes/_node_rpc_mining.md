@@ -1,3 +1,5 @@
+# RPC Calls - Mining
+
 ## getnetworkhashps
 
 ```javascript
@@ -292,6 +294,11 @@ const rpc = new bcoin.http.RPCClient({
 
 returns block template or proposal for use with mining.
 Also validates proposal if `mode` is specified as `proposal`.
+
+*Note: This is described in
+[BIP22 - Fundamentals](https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki)
+[BIP23 - Pooled Mining](https://github.com/bitcoin/bips/blob/master/bip-0023.mediawiki)
+[BIP145 - Updates for Segregated Witness](https://github.com/bitcoin/bips/blob/master/bip-0145.mediawiki)*
 
 ### Params
 N. | Name | Default |  Description

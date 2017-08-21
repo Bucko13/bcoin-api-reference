@@ -1,3 +1,5 @@
+# RPC Calls - Network
+
 ## getconnectioncount
 
 ```shell--curl
