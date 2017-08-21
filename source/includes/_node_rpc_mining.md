@@ -178,13 +178,25 @@ curl $url/ \
 ```
 
 ```shell--cli
-# Because there's request timeout set on CLI http requests.
-# you need to send custom request with different timeout.
+# Because there is a request timeout set on CLI http requests
+# without manually adjusting the timeout, this call will timeout before the request is complete
+bcoin cli rpc getworklp
 ```
 
 ```javascript
-// Because there's request timeout set on rpc.execute,
-// you need to send custom request with different timeout.
+// Because there is a request timeout set on CLI http requests
+// without manually adjusting the timeout, this call will timeout before the request is complete
+const rpc = new bcoin.http.RPCClient({
+  network: 'testnet'
+});
+
+(async () => {
+  const res = await rpc.execute('getworklp');
+
+  console.log(res);
+})().catch((err) => {
+  console.error(err.stack);
+});
 ```
 
 > The above command returns JSON "result" like this:
@@ -296,8 +308,8 @@ returns block template or proposal for use with mining.
 Also validates proposal if `mode` is specified as `proposal`.
 
 *Note: This is described in
-[BIP22 - Fundamentals](https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki)
-[BIP23 - Pooled Mining](https://github.com/bitcoin/bips/blob/master/bip-0023.mediawiki)
+[BIP22 - Fundamentals](https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki),
+[BIP23 - Pooled Mining](https://github.com/bitcoin/bips/blob/master/bip-0023.mediawiki),
 [BIP145 - Updates for Segregated Witness](https://github.com/bitcoin/bips/blob/master/bip-0145.mediawiki)*
 
 ### Params
