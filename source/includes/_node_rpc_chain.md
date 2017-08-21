@@ -44,18 +44,6 @@ None. |
 
 
 
-## verifychain
-
-Not implemented.
-
-### Params
-N. | Name | Default |  Description
---------- | --------- | --------- | -----------
-1 | checklevel | Required | Level of verification
-1 | numblocks | Required | Number of blocks to verify
-
-
-
 ## invalidateblock
 
 ```javascript
