@@ -30,8 +30,7 @@ bcoin cli coin $hash $index
 
 ```javascript
 const client = new bcoin.http.Client({
-  network: 'testnet',
-  db: 'leveldb'
+  network: 'testnet'
 });
 
 (async () => {
@@ -95,8 +94,7 @@ bcoin cli coin $address
 
 ```javascript
 const client = new bcoin.http.Client({
-  network: 'testnet',
-  db: 'leveldb'
+  network: 'testnet'
 });
 
 (async () => {
@@ -156,7 +154,7 @@ address1='mwLHWwWPDwtCBZA7Ltg9QSzKK5icdCU5rb';
 curl $url/coin/address \
   -H 'Content-Type: application/json' \
   -X POST \
-  --data "{ \"addresses\":[ \"$address0\", \"$address1\" ]}"
+  --data '{ "addresses":[ "'$address0'", "'$address1'" ]}'
 ```
 
 ```shell--cli
@@ -165,8 +163,7 @@ No CLI Option.
 
 ```javascript
 const client = new bcoin.http.Client({
-  network: 'testnet',
-  db: 'leveldb'
+  network: 'testnet'
 });
 
 (async () => {
