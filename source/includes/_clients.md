@@ -27,6 +27,12 @@ there are couple of ways you can use API.
 ## Configuring BCOIN CLI
 
 ```shell--visible
+# You can use config file
+bcoin cli --config /full/path/to/bcoin.conf
+
+# Or with prefix (which will later load bcoin.conf file from the directory)
+bcoin cli --prefix /full/path/to/bcoin/dir
+
 # You can configure it by passing arguments:
 bcoin cli --network=regtest info
 bcoin cli info --network=regtest
