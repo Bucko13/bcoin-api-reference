@@ -126,7 +126,7 @@ None. |
 ## getrawtransaction
 
 ```javascript
-let txhash;
+let txhash, verbose=0;
 ```
 
 ```shell--vars
@@ -139,12 +139,12 @@ curl $url/ \
   -X POST \
   --data '{
     "method": "getrawtransaction",
-    "params": [ "'$txhash'" ]
+    "params": [ "'$txhash'", "'$verbose'" ]
   }'
 ```
 
 ```shell--cli
-bcoin cli rpc getrawtransaction $txhash
+bcoin cli rpc getrawtransaction $txhash $verbose
 ```
 
 ```javascript
@@ -153,7 +153,7 @@ const rpc = new bcoin.http.RPCClient({
 });
 
 (async () => {
-  const res = await rpc.execute('getrawtransaction', [ txhash ]);
+  const res = await rpc.execute('getrawtransaction', [ txhash, verbose ]);
 
   console.log(res);
 })().catch((err) => {
@@ -173,7 +173,7 @@ Returns raw transaction
 N. | Name | Default |  Description
 --------- | --------- | --------- | -----------
 1 | txhash | Required | Transaction hash
-
+2 | verbose | false | Returns json formatted if true
 
 
 
