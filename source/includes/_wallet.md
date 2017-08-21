@@ -58,18 +58,18 @@ Note that accounts should not be accessed directly from the public API. They do 
 > Wallet options object will look something like this
 
 ```json
-  {
-    "id": "walletId",
-    "witness": true,
-    "watchOnly": false,
-    "accountKey": key,
-    "accountIndex": 1,
-    "type": "pubkeyhash"
-    "m": 1, 
-    "n": 1,
-    "keys": [],
-    "mnemonic": 'differ trigger sight sun undo fine sheriff mountain prison remove fantasy arm'
-  }
+{
+  "id": "walletId",
+  "witness": true,
+  "watchOnly": false,
+  "accountKey": key,
+  "accountIndex": 1,
+  "type": "pubkeyhash"
+  "m": 1, 
+  "n": 1,
+  "keys": [],
+  "mnemonic": 'differ trigger sight sun undo fine sheriff mountain prison remove fantasy arm'
+}
 ```
 Options are used for wallet creation. None are required. 
 
@@ -92,9 +92,13 @@ mnemonic | String | | A mnemonic phrase to use to instantiate an hd private key.
 ## Wallet Auth
 > The following samples return a wallet object
 
+```javascript
+let token, id;
+```
+
 ```shell--vars
-    token='977fbb8d212a1e78c7ce9dfda4ff3d7cc8bcd20c4ccf85d2c9c84bbef6c88b3c'
-    id='primary'
+token='977fbb8d212a1e78c7ce9dfda4ff3d7cc8bcd20c4ccf85d2c9c84bbef6c88b3c'
+id='primary'
 ```
 
 ```shell--curl
@@ -210,29 +214,28 @@ id <br> _string_ | named id of the wallet whose info you would like to retrieve
 
 ## Get Master HD Key
 ```javascript
-  let id
-  let network
+let id, network;
 ```
 ```shell--vars
-  id='test'
-  network='testnet'
+id='test'
+network='testnet'
 ```
 
 ```shell--curl
- curl $url/wallet/$id/master
+curl $url/wallet/$id/master
 ```
 
 ```shell--cli
-  bcoin cli wallet master --id=$id --network=$network
+bcoin cli wallet master --id=$id --network=$network
 ```
 
 ```javascript
-  const wallet = new bcoin.http.Wallet({ id: id,  network: network});
+const wallet = new bcoin.http.Wallet({ id: id,  network: network});
 
-  (async() => {
-    const master = await wallet.getMaster();
-    console.log(master);
-  })();
+(async() => {
+  const master = await wallet.getMaster();
+  console.log(master);
+})();
 ``` 
 
 > Sample response: 
@@ -266,36 +269,34 @@ id <br> _string_ | named id of the wallet whose info you would like to retrieve
 ## Create New Wallet
 
 ```javascript
-  let id
-  let witness
+let id, witness;
 ```
 
 ```shell--vars
-  id = 'foo'
-  witness = false
+id = 'foo'
+witness = false
 ```
 
 ```shell--curl
-  curl $url/wallet/$id \
-    -X PUT \
-    --data '{"witness":'$witness'}' 
+curl $url/wallet/$id \
+  -X PUT \
+  --data '{"witness":'$witness'}' 
 ```
 
 ```shell--cli
-  bcoin cli wallet create $id --witness=$witness
+bcoin cli wallet create $id --witness=$witness
 ```
 
 ```javascript
-  const client = new bcoin.http.Client();
-  const options = {
-    id: id,
-    witness: witness
-  };
+const client = new bcoin.http.Client();
+const options = {
+  id: id,
+  witness: witness
+};
 
-  (async () => {
-    const newWallet = await client.createWallet(options)
-  })(); 
-
+(async () => {
+  const newWallet = await client.createWallet(options)
+})(); 
 ```
 
 > Sample response: 
@@ -358,40 +359,38 @@ See <a href="#wallet-options">Wallet Options</a> for full list and description o
 
 ## Change Passphrase
 ```javascript
-  let id
-  let oldPass
-  let newPass
+let id, oldPass, newPass;
 ```
 
 ```shell--vars
-  id='test'
-  oldPass = 'oldpass123'
-  newPass='newpass123'
+id='test'
+oldPass = 'oldpass123'
+newPass='newpass123'
 ```
 
 ```shell--cli
-  > No command available
+> No command available
 ```
 
 ```shell-curl
-  curl $url/wallet/$id/passphrase \
-    -X POST
-    --data '{"old":'$oldPass', "new":'$newPass'}'
+curl $url/wallet/$id/passphrase \
+  -X POST
+  --data '{"old":'$oldPass', "new":'$newPass'}'
 ```
 
 ```javascript
-  const client = new bcoin.http.CLient();
+const client = new bcoin.http.CLient();
 
-  (async () => {
-    const response = await client.setPassphrase(id, oldPass, newPass);
-    console.log(response);
-  });
+(async () => {
+  const response = await client.setPassphrase(id, oldPass, newPass);
+  console.log(response);
+});
 ```
 
 > Sample Response:
 
 ```json
-  {"success": true}
+{"success": true}
 ```
 
 Change wallet passphrase. Encrypt if unencrypted.
@@ -415,38 +414,34 @@ passphrase <br> _string | New passphrase
 ## Unlock Wallet
 
 ```javascript
-  let id
-  let pass
-  let timeout
+let id, pass, timeout
 ```
 
 ```shell--vars
-  id='test'
-  pass='foo'
-  timeout=60
+id='test', pass='foo', timeout=60
 ```
 
 ```shell--cli
-  bcoin cli wallet unlock --id=$id $pass $timeout
+bcoin cli wallet unlock --id=$id $pass $timeout
 ```
 
 ```shell--curl
-  curl $url/wallet/$id/unlock \
-    -X POST
-    --data '{"passphrase":'$pass', "timeout": '$timeout'}'
+curl $url/wallet/$id/unlock \
+  -X POST
+  --data '{"passphrase":'$pass', "timeout": '$timeout'}'
 ```
 
 ```javascript
-  const client = new bcoin.http.Client();
-  (async () => {
-    const response = await client.unlock(id, pass, timeout);
-    console.log(response);
-  })();
+const client = new bcoin.http.Client();
+(async () => {
+  const response = await client.unlock(id, pass, timeout);
+  console.log(response);
+})();
 ```
 > Sample Response
 
 ```json
-  {"success": true}
+{"success": true}
 ```
 
 Derive the AES key from passphrase and hold it in memory for a specified number of seconds. Note: During this time, account creation and signing of transactions will not require a passphrase.
@@ -464,33 +459,33 @@ timeout <br> _number> | time to re-lock the wallet in seconds. (default=60)
 ## Lock Wallet 
 
 ```javascript
-  let id
+let id;
 ```
 
 ```shell--vars
-  id='test'
+id='test'
 ```
 
 ```shell--cli
-  bcoin cli wallet lock --id=$id
+bcoin cli wallet lock --id=$id
 ```
 
 ```shell--curl
-  curl $url/wallet/$id/lock \
-    -X POST
+curl $url/wallet/$id/lock \
+  -X POST
 ```
 
 ```javascript
-  const client = new bcoin.http.Client();
-  (async () => {
-    const response = await client.lock(id);
-    console.log(response);
-  })();
+const client = new bcoin.http.Client();
+(async () => {
+  const response = await client.lock(id);
+  console.log(response);
+})();
 ```
 > Sample Response
 
 ```json
-  {"success": true}
+{"success": true}
 ```
 
 If unlock was called, zero the derived AES key and revert to normal behavior.
@@ -502,33 +497,31 @@ If unlock was called, zero the derived AES key and revert to normal behavior.
 ## Import Public/Private Key
 
 ```javascript
-  let id
-  let account
-  let key
+let id, account, key;
 ```
 
 ```shell--vars
-  id='test'
-  account='test-acount'
-  key='0215a9110e2a9b293c332c28d69f88081aa2a949fde67e35a13fbe19410994ffd9'
+id='test'
+account='test-acount'
+key='0215a9110e2a9b293c332c28d69f88081aa2a949fde67e35a13fbe19410994ffd9'
 ```
 
 ```shell--cli
-  bcoin cli wallet import --id=$id $key
+bcoin cli wallet import --id=$id $key
 ```
 
 ```shell--curl
-  curl $url/wallet/$id/import \
-    -X POST \
-    --data '{"account":'$account', "privateKey":'$key'}'
+curl $url/wallet/$id/import \
+  -X POST \
+  --data '{"account":'$account', "privateKey":'$key'}'
 ```
 
 ```javascript
-  const wallet = new bcoin.http.Wallet({ id: id });
-  (async () => {
-    const response = await wallet.importKey(account, key);
-    console.log(response);
-  })();
+const wallet = new bcoin.http.Wallet({ id: id });
+(async () => {
+  const response = await wallet.importKey(account, key);
+  console.log(response);
+})();
 ```
 
 Import a standard WIF key. 
@@ -558,33 +551,31 @@ publicKey <br> _string_ | Hex encoded public key
 
 ## Import Address
 ```javascript
-  let id
-  let account
-  let address
+let id, account, address;
 ```
 
 ```shell--vars
-  id='foo'
-  account='bar'
-  address='moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA'
+id='foo'
+account='bar'
+address='moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA'
 ```
 
 ```shell--cli
-  bcoin cli wallet watch --id=$id --account=$account $address
+bcoin cli wallet watch --id=$id --account=$account $address
 ```
 
 ```shell--curl
-  curl $url/wallet/$id/import
-    -X POST
-    --data '{"account":'$account', "address":'$address'}'
+curl $url/wallet/$id/import
+  -X POST
+  --data '{"account":'$account', "address":'$address'}'
 ```
 
 ```javascript
-  const wallet = new bcoin.http.Wallet({ id: id });
+const wallet = new bcoin.http.Wallet({ id: id });
 
-  (async () => {
-    const response = await wallet.importAddress(id, account, address)
-  })();
+(async () => {
+  const response = await wallet.importAddress(id, account, address)
+})();
 ```
 
 Import a Base58Check encoded address. Addresses (like public keys) can only be imported into watch-only wallets
@@ -604,32 +595,31 @@ address <br> _string_ | Base58Check encoded address
 
 ## Reset Authentication Token
 ```javascript
-  let id
-  let passphrase
+let id, passphrase;
 ```
 
 ```shell--vars
-  id='foo'
-  passphrase="bar"
+id='foo'
+passphrase="bar"
 ```
 
 ```shell--cli
-  bcoin cli wallet retoken --id=$id --passphrase=$passphrase
+bcoin cli wallet retoken --id=$id --passphrase=$passphrase
 ```
 
 ```shell--curl
-  curl $url/wallet/$id/retoken \
-    -X POST
-    --data '{"passphrase":'$passphrase'}"
+curl $url/wallet/$id/retoken \
+  -X POST
+  --data '{"passphrase":'$passphrase'}"
 ```
 
 ```javascript
-  const wallet = new bcoin.http.Wallet({ id: id });
+const wallet = new bcoin.http.Wallet({ id: id });
 
-  (async () => { 
-    const token = await wallet.retoken(passphrase);
-    console.log(token);
-  })();
+(async () => { 
+  const token = await wallet.retoken(passphrase);
+  console.log(token);
+})();
 ```
 
 > Sample response: 

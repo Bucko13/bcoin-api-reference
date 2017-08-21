@@ -9,21 +9,21 @@ Replace `[TARGET_ACTION]` with one of the available actions listed below
 
 ## Wallet Rescan
 ```javascript
-  let height;
+let height;
 ```
 
 ```shell--vars
-  height = 50000
+height = 50000
 ```
 
 ```shell--curl
-  curl $url/wallet/_admin/rescan \
-    -X POST \
-    --data '{"height": '$height'}'
+curl $url/wallet/_admin/rescan \
+  -X POST \
+  --data '{"height": '$height'}'
 ```
 
 ```shell--cli
-  bcoin cli rescan $height
+bcoin cli rescan $height
 ```
 
 ```javascript
@@ -41,7 +41,7 @@ const client = new bcoin.http.Client({
 > Response Body:
 
 ```json
-    {"success": true}
+{"success": true}
 ```
 
 Initiates a blockchain rescan for the walletdb. Wallets will be rolled back to the specified height (transactions above this height will be unconfirmed).
@@ -52,18 +52,18 @@ Initiates a blockchain rescan for the walletdb. Wallets will be rolled back to t
 
 ## Wallet Resend
 ```shell--curl
-  curl $url/wallet/_admin/resend \
-    -X POST 
-    --data "{}"
+curl $url/wallet/_admin/resend \
+-X POST 
+--data "{}"
 ```
 
 ```shell--cli
-  bcoin cli resend
+bcoin cli resend
 ```
 
 ```javascript
 const client = new bcoin.http.Client({
-    network: 'testnet',
+  network: 'testnet',
 });
 
 (async () => {
@@ -86,21 +86,21 @@ Rebroadcast all pending transactions in all wallets.
 
 ##Wallet Backup
 ```javascript
-  let path;
+let path;
 ```
 
 ```shell--vars
-  path='/path/to/new/backup'
+path='/path/to/new/backup'
 ```
 
 ```shell--curl
-  curl $url/wallet/_admin/backup \
-    -X POST \
-    --data="{ \"path\": \"$path\" }" 
+curl $url/wallet/_admin/backup \
+  -X POST \
+  --data="{ \"path\": \"$path\" }" 
 ```
 
 ```shell--cli
-  bcoin cli backup $path
+bcoin cli backup $path
 ```
 
 ```javascript
@@ -117,7 +117,7 @@ const client = new bcoin.http.Client({
 > Response Body:
 
 ```json
-    {"success": true}
+{"success": true}
 ```
 
 Safely backup the wallet database to specified path (creates a clone of the database).
@@ -129,11 +129,11 @@ Safely backup the wallet database to specified path (creates a clone of the data
 ## List all Wallets
 
 ```shell--curl
-  curl $url/wallet/_admin/wallets
+curl $url/wallet/_admin/wallets
 ```
 
 ```shell--cli
-  bcoin cli wallets
+bcoin cli wallets
 ```
 
 ```javascript
@@ -151,10 +151,10 @@ const client = new bcoin.http.Client({
 > Sample Response Body:
 
 ```json
-  [
-    "primary",
-    "test"
-  ]
+[
+  "primary",
+  "test"
+]
 ```
 
 List all wallet IDs. Returns an array of strings.

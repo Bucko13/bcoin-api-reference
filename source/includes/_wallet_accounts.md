@@ -55,19 +55,19 @@ From the [BIP44 Specification](https://github.com/bitcoin/bips/blob/master/bip-0
 ## Get Wallet Account List
 
 ```shell--vars
-  id='test' 
+id='test' 
 ```
 
 ```shell--cli
-  bcoin cli wallet account list --id=$id
+bcoin cli wallet account list --id=$id
 ```
 
 ```javascript
-  const client = new bcoin.http.Client();
-  (async () => {
-    const accountInfo = await client.getAccounts(id);
-    console.log(accountInfo);
-  })();
+const client = new bcoin.http.Client();
+(async () => {
+  const accountInfo = await client.getAccounts(id);
+  console.log(accountInfo);
+})();
 ```
 
 > Sample response: 
@@ -95,30 +95,28 @@ Note that command defaults to primary (default) wallet if no wallet id is passed
 
 ## Get Account Information
 ```javascript
-  let id;
-  let account;
+let id, account;
 ```
 
 ```shell--vars
-  id='test'
-  account='default'
+id='test'
+account='default'
 ```
 
 ```shell--curl
-  curl $url/wallet/$id/account/$account
-  
+curl $url/wallet/$id/account/$account
 ```
 
 ```shell--cli
-  bcoin cli wallet --id=$id account get $account
+bcoin cli wallet --id=$id account get $account
 ```
 
 ```javascript
-  const client = new bcoin.http.Client();
-  (async () => {
-    const accountInfo = await client.getAccount(id, account);
-    console.log(accountInfo);
-  })();
+const client = new bcoin.http.Client();
+(async () => {
+  const accountInfo = await client.getAccount(id, account);
+  console.log(accountInfo);
+})();
 ```
 
 > Sample response: 
@@ -161,33 +159,32 @@ account <br> _string_ | id of account you would to retrieve information for
 ## Create new wallet account
 
 ```javascript
-  let id;
-  let name;
+let id, name;
 ```
 
 ```shell--vars
-  id='test'
-  name='menace'
+id='test'
+name='menace'
 ```
 
 ```shell--cli
-  bcoin cli wallet --id=$id account create $name --type=multisig
+bcoin cli wallet --id=$id account create $name --type=multisig
 ```
 
 ```shell--curl
-  curl $url/wallet/$id/account/$name \
-      -X PUT
-      --data '{"type": "multisig"}'
+curl $url/wallet/$id/account/$name \
+    -X PUT
+    --data '{"type": "multisig"}'
 ```
 
 ```javascript
-  const client = new bcoin.http.Client();
-  const options = {type: 'multisig'};// options are the same as available wallet options
+const client = new bcoin.http.Client();
+const options = {type: 'multisig'};// options are the same as available wallet options
 
-  (async () => {
-    const account = await client.createAccount(name, options);
-    console.log(account);
-  });
+(async () => {
+  const account = await client.createAccount(name, options);
+  console.log(account);
+});
 ```
 
 > Sample response: 
