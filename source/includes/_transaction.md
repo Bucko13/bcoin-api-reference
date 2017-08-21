@@ -26,8 +26,7 @@ bcoin cli tx $txhash
 
 ```javascript
 const client = new bcoin.http.Client({
-  network: 'testnet',
-  db: 'leveldb'
+  network: 'testnet'
 });
 
 (async () => {
@@ -121,8 +120,7 @@ bcoin cli tx $address
 
 ```javascript
 const client = new bcoin.http.Client({
-  network: 'testnet',
-  db: 'leveldb'
+  network: 'testnet'
 });
 
 (async () => {
@@ -232,7 +230,7 @@ address1='mwLHWwWPDwtCBZA7Ltg9QSzKK5icdCU5rb';
  curl $url/tx/address \
   -H 'Content-Type: application/json' \
   -X POST \
-  --data "{ \"addresses\":[ \"$address0\", \"$address1\" ]}"
+  --data '{ "addresses":[ "'$address0'", "'$address1'" ]}'
 ```
 
 ```shell--cli
@@ -241,8 +239,7 @@ No CLI Option.
 
 ```javascript
 const client = new bcoin.http.Client({
-  network: 'testnet',
-  db: 'leveldb'
+  network: 'testnet'
 });
 
 (async () => {
