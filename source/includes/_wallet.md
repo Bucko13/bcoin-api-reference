@@ -114,14 +114,11 @@ const httpWallet = new bcoin.http.Wallet({
     id: id, 
     token: token,
     network: 'testnet',
-    db: 'leveldb'
 });
 
 (async () => {
-  await httpWallet.open();
   const wallet = await httpWallet.getInfo();
   console.log(wallet);
-  httpWallet.close();
 })();
 ```
 
