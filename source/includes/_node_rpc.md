@@ -28,8 +28,6 @@ const rpc = new bcoin.http.RPCClient({
 
 > The above command returns JSON structured like this:
 
-> bcoin cli rpc and javascript will return error or result.
-
 > Further examples will only include "result" part.
 
 ```json
@@ -42,6 +40,9 @@ This is documentation how to use it with `bcoin`.
 
 RPC Calls are accepted at:
 `POST /`
+
+*Note: bcoin cli rpc and javascript will return error OR result.*
+
 
 ### POST Parameters RPC
 Parameter | Description

@@ -549,7 +549,8 @@ const rpc = new bcoin.http.RPCClient({
   "0871f1a42279397b7508c75e142b903a945a19af08c6de6970e266255d10f08f"
 ]
 ```
-Mines `blocknumber` blocks.
+
+Mines `numblocks` number of blocks.
 
 ### Params
 N. | Name | Default |  Description

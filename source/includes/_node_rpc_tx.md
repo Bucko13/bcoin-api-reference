@@ -462,11 +462,11 @@ const rpc = new bcoin.http.RPCClient({
 ```
 
 <aside class="info">
-Note: Transaction in example doesn't spacify change output,
+Note: Transaction in example doesn't specify change output,
 you can do it by specifying another <code>address: amount</code> pair.
 </aside>
 
-Creates raw transaction without any verification and without sign.
+Creates raw, unsigned transaction without any formal verification.
 
 ### Params
 N. | Name | Default |  Description
