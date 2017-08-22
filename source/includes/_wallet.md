@@ -7,7 +7,7 @@
 {
   "network": "testnet",
   "wid": 1,
-  "id": "primary",
+  "id": "foo",
   "initialized": true,
   "watchOnly": false,
   "accountDepth": 1,
@@ -152,7 +152,7 @@ bcoin cli wallet get --id=test --network=testnet
 `use strict`
 
 const client = new bcoin.http.Client({  network: 'testnet' });
-const id = 'test';
+const id = 'foo';
 
 (async () => {
   const wallet = await client.getWallet(id);
@@ -166,7 +166,7 @@ const id = 'test';
 {
   "network": "testnet",
   "wid": 1,
-  "id": "test",
+  "id": "foo",
   "initialized": true,
   "watchOnly": false,
   "accountDepth": 1,
@@ -217,7 +217,7 @@ id <br> _string_ | named id of the wallet whose info you would like to retrieve
 let id, network;
 ```
 ```shell--vars
-id='test'
+id='foo'
 network='testnet'
 ```
 
@@ -363,7 +363,7 @@ let id, oldPass, newPass;
 ```
 
 ```shell--vars
-id='test'
+id='foo'
 oldPass = 'oldpass123'
 newPass='newpass123'
 ```
@@ -418,7 +418,9 @@ let id, pass, timeout
 ```
 
 ```shell--vars
-id='test', pass='foo', timeout=60
+id='foo' 
+pass='bar', 
+timeout=60
 ```
 
 ```shell--cli
@@ -463,7 +465,7 @@ let id;
 ```
 
 ```shell--vars
-id='test'
+id='foo'
 ```
 
 ```shell--cli
@@ -501,7 +503,7 @@ let id, account, key;
 ```
 
 ```shell--vars
-id='test'
+id='foo'
 account='test-acount'
 key='0215a9110e2a9b293c332c28d69f88081aa2a949fde67e35a13fbe19410994ffd9'
 ```
@@ -641,62 +643,97 @@ Note: if you happen to lose the returned token, you will not be able to access t
 
 `POST /wallet/:id/retoken` 
 
-##POST /wallet/:id/send 
+## Send a transaction
+
+```javascript
+let id, rate, value, address;
+```
+
+```shell--vars
+id='foo'
+rate=100
+value=1000
+address="moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA"
+```
+
+```shell--cli
+bcoin cli wallet send --id=$id --value=$value --address=$address
+```
+
+```shell--curl
+curl $url/wallet/$id/send
+  -X POST
+  --data '{
+    "rate":'$rate',
+    "outputs":[
+      {"address":"'$address'", "value":'$value'}
+    ] 
+    }'
+```
+
+```javascript
+const httpWallet = bcoin.http.wallet({ id: id });
+const options = {
+  rate: rate,
+  outputs: [{ value: value, address; address }]
+};
+
+(async () => {
+  const tx = await httpWallet.send(options);
+  console.log(tx);
+})();
+```
 
 > Sample response: 
 
 ```json 
 {
-  "wid": 1,
-  "id": "primary",
-  "hash": "0de09025e68b78e13f5543f46a9516fa37fcc06409bf03eda0e85ed34018f822",
+{
+  "wid": 13,
+  "id": "foo",
+  "hash": "c2da22cafcd076ea3db74bb2e3cf50f030e5240aa5daf4f778fb4954a866b41c",
   "height": -1,
   "block": null,
   "time": 0,
-  "mtime": 1486685530,
-  "date": "2017-02-10T00:12:10Z",
-  "index": -1,
-  "size": 226,
-  "virtualSize": 226,
-  "fee": "0.0000454",
-  "rate": "0.00020088",
+  "mtime": 1503364758,
+  "date": "2017-08-22T01:19:18Z",
+  "size": 225,
+  "virtualSize": 225,
+  "fee": 22,
+  "rate": 100,
   "confirmations": 0,
   "inputs": [
     {
-      "value": "50.0",
-      "address": "n4UANJbj2ZWy1kgt9g45XFGp57FQvqR8ZJ",
+      "value": 59991393,
+      "address": "mgChJ3wXDqRns7Y6UhjXCyxeuZZJoQNj7c",
       "path": {
         "name": "default",
         "account": 0,
-        "change": false,
-        "derivation": "m/0'/0/0"
+        "change": true,
+        "derivation": "m/0'/1/5"
       }
     }
   ],
   "outputs": [
     {
-      "value": "5.0",
-      "address": "mu5Puppq4Es3mibRskMwoGjoZujHCFRwGS",
-      "path": {
-        "name": "default",
-        "account": 0,
-        "change": false,
-        "derivation": "m/0'/0/7"
-      }
+      "value": 1000,
+      "address": "mmkYfyhaN4u8KjN4GrEfbh3J5kG4c1o4M9",
+      "path": null
     },
     {
-      "value": "44.9999546",
-      "address": "n3nFYgQR2mrLwC3X66xHNsx4UqhS3rkSnY",
+      "value": 59990371,
+      "address": "mueWpbWkB22LAEpZTuv2FjbvCpMps9LeVw",
       "path": {
         "name": "default",
         "account": 0,
         "change": true,
-        "derivation": "m/0'/1/0"
+        "derivation": "m/0'/1/6"
       }
     }
   ],
-  "tx": "0100000001c5b23b4348b7fa801f498465e06f9e80cf2f61eead23028de14b67fa78df3716000000006b483045022100d3d4d945cdd85f0ed561ae8da549cb083ab37d82fcff5b9023f0cce608f1dffe02206fc1fd866575061dcfa3d12f691c0a2f03041bdb75a36cd72098be096ff62a810121021b018b19426faa59fdda7f57e68c42d925752454d9ea0d6feed8ac186074a4bcffffffff020065cd1d000000001976a91494bc546a84c481fbd30d34cfeeb58fd20d8a59bc88ac447b380c010000001976a914f4376876aa04f36fc71a2618878986504e40ef9c88ac00000000"
+  "tx": "01000000015a9b8fa3fb300a29e9cde6464f49882228862b8e333792fea35ad15536383417010000006a47304402202df28a6fe24dc26b016acee539e137b9502009f57ae6988d468d203e770339f202203b6ab4cc020493061db2d405b2799af2b872d3395f5798616fc51e59f304d5cd0121028986f0724eb55b66bba72985212b95a2c5487631e411dc9cc5348a4531928129ffffffff02e8030000000000001976a9144462dc0989942e38474616dc104e46486c5744ee88ac63619303000000001976a9149affd314659d5ce9fa815fde4e82c879d1ea41d188ac00000000"
 }
+
 ```
 
 Create, sign, and send a transaction.
@@ -704,6 +741,22 @@ Create, sign, and send a transaction.
 ### HTTP Request 
 
 `POST /wallet/:id/send` 
+
+### Post Paramaters
+Parameter | Description
+--------- | ------------------
+rate <br> _int_ | the rate for transaction fees. Denominated in satoshis per kb
+outputs <br> _array_ | An array of outputs to send for the transaction
+smart <br> _bool_ | whether or not to estimate a smart fee based on current mempool
+account <br> _string_ | account to use for transaction
+passphrase <br> _string_ | passphrase to unlock the account
+
+
+### Output object
+Property | Description
+--------- | -----------
+value <br> _int_ | Value to send in satoshis
+address <br> _string_ | destination address for transaction 
 
 ##POST /wallet/:id/create 
 
@@ -854,7 +907,7 @@ Get wallet private key (WIF format) by address.
 {
   "network": "testnet",
   "wid": 1,
-  "id": "primary",
+  "id": "foo",
   "name": "default",
   "account": 0,
   "branch": 0,
@@ -898,7 +951,7 @@ Derive new nested p2sh receiving address for account.
 ```json 
 {
   "wid": 1,
-  "id": "primary",
+  "id": "foo",
   "account": -1,
   "unconfirmed": "8149.9999546",
   "confirmed": "8150.0"
