@@ -755,10 +755,48 @@ passphrase <br> _string_ | passphrase to unlock the account
 ### Output object
 Property | Description
 --------- | -----------
-value <br> _int_ | Value to send in satoshis
+value <br> _int_ | Value to send in bitcoin (as of beta-1.14)
 address <br> _string_ | destination address for transaction 
 
-##POST /wallet/:id/create 
+## Create a Transaction
+```javascript
+let id, rate, value, address;
+```
+
+```shell--vars
+id='foo'
+rate=100
+value=1000
+address="moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA"
+```
+
+```shell--cli
+bcoin cli wallet mktx --id=$id --rate=$rate --value=$value --address=$address
+```
+
+```shell--curl
+curl $url/wallet/$id/create
+  -X POST
+  --data '{
+    "rate":'$rate',
+    "outputs":[
+      {"address":"'$address'", "value":'$value'}
+    ] 
+    }'
+```
+
+```javascript
+const httpWallet = bcoin.http.wallet({ id: id });
+const outputs: [{ value: value, address; address }]
+const options = {
+  rate: rate,
+};
+
+(async () => {
+  const tx = await httpWallet.createTX(options, outputs);
+  console.log(tx);
+})();
+```
 
 > Sample response: 
 
@@ -808,6 +846,22 @@ address <br> _string_ | destination address for transaction
 
 Create and template a transaction (useful for multisig).
 Do not broadcast or add to wallet.
+
+### Post Paramters
+Paramter | Description
+--------- | ----------------
+rate <br> _int_ | the rate for transaction fees. Denominated in satoshis per kb
+outputs <br> _array_ | An array of outputs to send for the transaction
+smart <br> _bool_ | whether or not to estimate a smart fee based on current mempool
+passphrase <br> _string_ | passphrase to unlock the account
+
+
+### Output object
+Property | Description
+--------- | -----------
+value <br> _int_ | Value to send in bitcoin (as of beta-1.14)
+address <br> _string_ | destination address for transaction 
+
 
 ### HTTP Request 
 
