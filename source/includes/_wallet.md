@@ -951,13 +951,60 @@ Parameter | Description
 tx <br> _string_ | the hex of the transaction you would like to sign
 passphrase <br> _string_ | passphrase to unlock the wallet
 
-##POST /wallet/:id/zap 
+## Zap Transactions
 
-Remove all pending transactions older than a specified age. Returns array of txids.
+```javascript
+let id, age, account;
+```
+
+```shell--vars
+id="foo"
+account="baz"
+age=259200 # 72 hours
+```
+
+```shell--cli
+bcoin cli wallet zap --id=$id account=$account age=$age
+```
+
+```shell--curl
+curl $url/wallet/$id/zap \
+  -X POST \
+  --data '{
+            "account": "'$account'",
+            "age": "'$age'"
+          }'
+```
+
+```javascript
+const httpWallet = new bcoin.http.wallet({ id: id });
+
+(async () => {
+  const response = httpWallet.zap(account, age);
+  console.log(response);
+})();
+```
+
+> Sample Response
+
+
+```json
+{
+  "success": true
+}
+``` 
+
+Remove all pending transactions older than a specified age.
 
 ### HTTP Request 
 
 `POST /wallet/:id/zap` 
+
+### Post Parameters
+Paramaters | Description
+----------- | -------------
+account <br> _string_ or _number_ | account to zap from
+age <br> _number_ | age threshold to zap up to (unix time)
 
 ##DEL /wallet/:id/tx/:hash 
 
