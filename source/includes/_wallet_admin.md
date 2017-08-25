@@ -94,10 +94,9 @@ path='/path/to/new/backup'
 ```
 
 ```shell--curl
-curl $url/wallet/_admin/backup \
+curl $url/wallet/_admin/backup?path=/home/user/walletdb-backup.ldb \ 
   -X POST \
-  --data="{ \"path\": \"$path\" }" 
-```
+``
 
 ```shell--cli
 bcoin cli backup $path

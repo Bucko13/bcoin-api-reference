@@ -456,7 +456,7 @@ Derive the AES key from passphrase and hold it in memory for a specified number 
 Parameter | Description
 --------- | -----------------------
 passphrase <br> _string_ | Password used to encrypt the wallet being unlocked
-timeout <br> _number> | time to re-lock the wallet in seconds. (default=60)
+timeout <br> _number_ | time to re-lock the wallet in seconds. (default=60)
 
 ## Lock Wallet 
 
@@ -504,7 +504,7 @@ let id, account, key;
 
 ```shell--vars
 id='foo'
-account='test-acount'
+account='test-account'
 key='0215a9110e2a9b293c332c28d69f88081aa2a949fde67e35a13fbe19410994ffd9'
 ```
 
@@ -515,8 +515,9 @@ bcoin cli wallet import --id=$id $key
 ```shell--curl
 curl $url/wallet/$id/import \
   -X POST \
-  --data '{"account":'$account', "privateKey":'$key'}'
+  --data '{"account":"'$account'", "privateKey":"'$key'"}'
 ```
+
 
 ```javascript
 const wallet = new bcoin.http.Wallet({ id: id });
@@ -524,6 +525,13 @@ const wallet = new bcoin.http.Wallet({ id: id });
   const response = await wallet.importKey(account, key);
   console.log(response);
 })();
+```
+> Sample Response
+
+```json
+{
+  "success": true
+}
 ```
 
 Import a standard WIF key. 
@@ -569,7 +577,7 @@ bcoin cli wallet watch --id=$id --account=$account $address
 ```shell--curl
 curl $url/wallet/$id/import \
   -X POST \
-  --data '{"account":'$account', "address":'$address'}'
+  --data '{"account":"'$account'", "address":"'$address'"}'
 ```
 
 ```javascript
@@ -578,6 +586,14 @@ const wallet = new bcoin.http.Wallet({ id: id });
 (async () => {
   const response = await wallet.importAddress(id, account, address)
 })();
+```
+
+> Sample Response
+
+```json
+{
+  "success": true
+}
 ```
 
 Import a Base58Check encoded address. Addresses (like public keys) can only be imported into watch-only wallets
@@ -992,13 +1008,13 @@ const httpWallet = new bcoin.http.wallet({ id: id });
 {
   "success": true
 }
-``` 
+```
 
 Remove all pending transactions older than a specified age.
 
 ### HTTP Request 
 
-`POST /wallet/:id/zap` 
+`POST /wallet/:id/zap?age=3600` 
 
 ### Post Parameters
 Paramaters | Description
@@ -1006,21 +1022,83 @@ Paramaters | Description
 account <br> _string_ or _number_ | account to zap from
 age <br> _number_ | age threshold to zap up to (unix time)
 
-##DEL /wallet/:id/tx/:hash 
+## Delete Transaction
+```javascript
+let id, hash, passphrase;
+```
 
-Remove a pending transaction.
+```shell--vars
+id="foo"
+hash="2a22606ee555d2c26ec979f0c45cd2dc18c7177056189cb345989749fd58786"
+passphrase="bar"
+```
+
+```shell--cli
+# Not available in CLI
+```
+
+```shell--curl
+curl $url/wallet/$id/tx/$hash \ 
+  -X DELETE \
+  --data '{"passphrase": "'$passphrase'"}'
+```
+
+```javascript
+ // Not available in javascript wallet client. 
+```
+
+Abandon single pending transaction. Confirmed transactions will throw an error.
+`"TX not eligible"`
 
 ### HTTP Request 
 
 `DEL /wallet/:id/tx/:hash` 
 
-##GET /wallet/:id/block 
+Paramters | Description
+----------| --------------------
+id <br> _string_ | id of wallet where the transaction is that you want to remove
+hash <br> _string_ | hash of transaction you would like to remove.
 
-List all block heights which contain any wallet txs.
+## Get Blocks with Wallet Txs
+```javascript
+let id;
+```
+
+```shell--vars
+id="foo"
+```
+
+```shell--curl
+curl $url/wallet/$id/block
+```
+
+```shell--cli
+bcoin cli wallet blocks --id=$id
+```
+
+```javascript
+const httpWallet = new bcoin.http.wallet({ id: id });
+
+(async () => {
+  const blocks = await httpWallet.getBlocks();
+  console.log(blocks);
+}())
+```
+> Sample Response
+
+```json
+[ 1179720, 1179721, 1180146, 1180147, 1180148, 1180149 ]
+```
+
+List all block heights which contain any wallet txs. Returns an array of block heights
 
 ### HTTP Request 
 
 `GET /wallet/:id/block` 
+
+Parameters | Description
+-----------| ------------
+id <br> _string_ | id of wallet to query blocks with its transactions in it
 
 ##GET /wallet/:id/block/:height 
 
