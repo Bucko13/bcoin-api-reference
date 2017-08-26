@@ -400,3 +400,43 @@ Paramters | Description
 ----------| --------------------
 id <br> _string_ | id of wallet where the transaction is that you want to remove
 hash <br> _string_ | hash of transaction you would like to remove.
+
+##GET /wallet/:id/tx/history 
+
+Get wallet TX history. Returns array of tx details.
+
+### HTTP Request 
+
+`GET /wallet/:id/tx/history` 
+
+##GET /wallet/:id/tx/unconfirmed 
+
+Get pending wallet transactions. Returns array of tx details.
+
+### HTTP Request 
+
+`GET /wallet/:id/tx/unconfirmed` 
+
+##GET /wallet/:id/tx/range 
+
+Get range of wallet transactions by timestamp. Returns array of tx details.
+
+### HTTP Request 
+
+`GET /wallet/:id/tx/range` 
+
+##GET /wallet/:id/tx/last 
+
+Get last N wallet transactions.
+
+### HTTP Request 
+
+`GET /wallet/:id/tx/last` 
+
+##GET /wallet/:id/tx/:hash 
+
+Get wallet transaction details.
+
+### HTTP Request 
+
+`GET /wallet/:id/tx/:hash` 
