@@ -65,13 +65,13 @@ Note that accounts should not be accessed directly from the public API. They do 
   "accountKey": key,
   "accountIndex": 1,
   "type": "pubkeyhash"
-  "m": 1, 
+  "m": 1,
   "n": 1,
   "keys": [],
   "mnemonic": 'differ trigger sight sun undo fine sheriff mountain prison remove fantasy arm'
 }
 ```
-Options are used for wallet creation. None are required. 
+Options are used for wallet creation. None are required.
 
 ### Options Object
 Name | Type | Default | Description
@@ -114,8 +114,8 @@ bcoin cli wallet get --network=testnet --token=$token
 ```javascript
 `use strict`
 
-const httpWallet = new bcoin.http.Wallet({ 
-    id: id, 
+const httpWallet = new bcoin.http.Wallet({
+    id: id,
     token: token,
     network: 'testnet',
 });
@@ -159,15 +159,15 @@ curl $url/wallet/$id/retoken \
 ```javascript
 const wallet = new bcoin.http.Wallet({ id: id });
 
-(async () => { 
+(async () => {
   const token = await wallet.retoken(passphrase);
   console.log(token);
 })();
 ```
 
-> Sample response: 
+> Sample response:
 
-```json 
+```json
 {
   "token": "2d04e217877f15ba920d02c24c6c18f4d39df92f3ae851bec37f0ade063244b2"
 }
@@ -180,7 +180,7 @@ Note: if you happen to lose the returned token, you will not be able to access t
 </aside>
 
 
-### HTTP Request 
+### HTTP Request
 
 `POST /wallet/:id/retoken`
 
@@ -209,7 +209,7 @@ const id = 'foo';
 
 > Output is same as wallet object above
 
-```json 
+```json
 {
   "network": "testnet",
   "wid": 1,
@@ -283,11 +283,11 @@ const wallet = new bcoin.http.Wallet({ id: id,  network: network});
   const master = await wallet.getMaster();
   console.log(master);
 })();
-``` 
+```
 
-> Sample response: 
+> Sample response:
 
-```json 
+```json
 {
   "encrypted": false,
   "key": {
@@ -305,7 +305,7 @@ const wallet = new bcoin.http.Wallet({ id: id,  network: network});
 
 Get wallet master HD key. This is normally censored in the wallet info route. The provided api key must have admin access.
 
-### HTTP Request 
+### HTTP Request
 
 `GET /wallet/:id/master`
 
@@ -327,7 +327,7 @@ witness = false
 ```shell--curl
 curl $url/wallet/$id \
   -X PUT \
-  --data '{"witness":'$witness'}' 
+  --data '{"witness":'$witness'}'
 ```
 
 ```shell--cli
@@ -343,12 +343,12 @@ const options = {
 
 (async() => {
   const newWallet = await client.createWallet(options)
-})(); 
+})();
 ```
 
-> Sample response: 
+> Sample response:
 
-```json 
+```json
 {
   "network": "testnet",
   "wid": 2,
@@ -391,9 +391,9 @@ const options = {
 
 Create a new wallet with a specified ID.
 
-### HTTP Request 
+### HTTP Request
 
-`PUT /wallet/:id` 
+`PUT /wallet/:id`
 
 Parameters | Description
 ---------- | -----------
@@ -401,7 +401,7 @@ id <br> _string_ | id of wallet you would like to create
 
 <aside class="notice">
 See <a href="#wallet-options">Wallet Options</a> for full list and description of possible options that can be passed
-</aside> 
+</aside>
 
 
 ## Change Passphrase
@@ -442,9 +442,9 @@ const client = new bcoin.http.CLient();
 
 Change wallet passphrase. Encrypt if unencrypted.
 
-### HTTP Request 
+### HTTP Request
 
-`POST /wallet/:id/passphrase` 
+`POST /wallet/:id/passphrase`
 
 ### Body Parameters
 Paramters | Description
@@ -465,8 +465,8 @@ let id, pass, timeout
 ```
 
 ```shell--vars
-id='foo' 
-pass='bar', 
+id='foo'
+pass='bar',
 timeout=60
 ```
 
@@ -495,7 +495,7 @@ const client = new bcoin.http.Client();
 
 Derive the AES key from passphrase and hold it in memory for a specified number of seconds. Note: During this time, account creation and signing of transactions will not require a passphrase.
 
-### HTTP Request 
+### HTTP Request
 
 `POST /wallet/:id/unlock`
 
@@ -505,7 +505,7 @@ Parameter | Description
 passphrase <br> _string_ | Password used to encrypt the wallet being unlocked
 timeout <br> _number_ | time to re-lock the wallet in seconds. (default=60)
 
-## Lock Wallet 
+## Lock Wallet
 
 ```javascript
 let id;
@@ -539,9 +539,9 @@ const client = new bcoin.http.Client();
 
 If unlock was called, zero the derived AES key and revert to normal behavior.
 
-### HTTP Request 
+### HTTP Request
 
-`POST /wallet/:id/lock` 
+`POST /wallet/:id/lock`
 
 ## Import Public/Private Key
 
@@ -581,7 +581,7 @@ const wallet = new bcoin.http.Wallet({ id: id });
 }
 ```
 
-Import a standard WIF key. 
+Import a standard WIF key.
 
 An import can be either a private key or a public key for watch-only. (Watch Only wallets will throw an error if trying to import a private key)
 
@@ -592,9 +592,9 @@ key.
 Note that imported keys do not exist anywhere in the wallet's HD tree. They can be associated with accounts but will not be properly backed up with only the mnemonic.
 </aside>
 
-### HTTP Request 
+### HTTP Request
 
-`POST /wallet/:id/import` 
+`POST /wallet/:id/import`
 
 ### Body Paramters
 Paramter | Description
@@ -647,16 +647,16 @@ Import a Base58Check encoded address. Addresses (like public keys) can only be i
 
 The HTTP endpoint is the same as for key imports.
 
-### HTTP Request 
+### HTTP Request
 
-`POST /wallet/:id/import` 
+`POST /wallet/:id/import`
 
 ### Body Paramters
 Paramter | Description
 -------- | -------------------------
 id <br> _string_ | id of target wallet to import key into
 address <br> _string_ | Base58Check encoded address
- 
+
 ## Get Blocks with Wallet Txs
 ```javascript
 let id;
@@ -690,15 +690,15 @@ const httpWallet = new bcoin.http.wallet({ id: id });
 
 List all block heights which contain any wallet txs. Returns an array of block heights
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/:id/block` 
+`GET /wallet/:id/block`
 
 Parameters | Description
 -----------| ------------
 id <br> _string_ | id of wallet to query blocks with its transactions in it
 
-##GET /wallet/:id/block/:height 
+## Get Wallet Block by Height
 ```javascript
 let id, height;
 ```
@@ -725,9 +725,9 @@ const httpWallet = new bcoin.http.Wallet({ id: id });
 })
 ```
 
-> Sample response: 
+> Sample response:
 
-```json 
+```json
 {
   "hash": "0000000000013cc12ea4b3ff403a3c05d96da695638e468cf26409eca87beb6a",
   "height": 1179720,
@@ -738,54 +738,139 @@ const httpWallet = new bcoin.http.Wallet({ id: id });
 }
 ```
 
-Get block info by height. 
+Get block info by height.
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/:id/block/:height` 
+`GET /wallet/:id/block/:height`
 
 Paramaters | Description
 -----------| -------------
 id <br> _string_ | id of wallet which has tx in the block being queried
-height <br> _int_ | height of block being queried 
+height <br> _int_ | height of block being queried
 
-##PUT /wallet/:id/shared-key 
+
+## Add xpubkey (Multisig)
+```javascript
+let id, key;
+```
+
+```shell--vars
+id="multi-foo"
+key=""
+```
+
+```shell--cli
+bcoin cli wallet --id=$id shared add $key
+```
+
+```shell--curl
+curl $url/wallet/$id/shared-key \
+  -X PUT
+  --data '{"accountKey": $key}'
+```
+
+```javascript
+const httpWallet = new bcoin.http.wallet({ id: id });
+const account = 'default';
+
+(async () => {
+  const response = await httpWallet.addSharedKey(account, key);
+  console.log(response);
+})();
+```
+
+> Sample Response
+
+```json
+{
+  "success": true
+}
+```
 
 Add a shared xpubkey to wallet. Must be a multisig wallet.
 
-### HTTP Request 
+### HTTP Request
 
-`PUT /wallet/:id/shared-key` 
+`PUT /wallet/:id/shared-key`
 
-##DEL /wallet/:id/shared-key 
+### Body Parameters
+Paramter | Description
+---------| --------------
+accountKey <br> _string_ | xpubkey to add to the multisig wallet
+
+## Remove xpubkey (Multisig)
+
+```javascript
+let id, key;
+```
+
+```shell--vars
+id="multi-foo"
+key=""
+```
+
+```shell--cli
+bcoin cli wallet --id=$id shared remove $key
+```
+
+```shell--curl
+curl $url/wallet/$id/shared-key \
+  -X DELETE
+  --data '{"accountKey": "'$key'"}'
+```
+
+```javascript
+const httpWallet = new bcoin.http.wallet({ id: id });
+const account = 'default';
+
+(async () => {
+  const response = await httpWallet.removeSharedKey(account, key);
+  console.log(response);
+})();
+```
+
+> Sample Response
+
+```json
+{
+  "success": true
+}
+```
 
 Remove shared xpubkey from wallet if present.
 
-### HTTP Request 
+### HTTP Request
 
-`DEL /wallet/:id/shared-key` 
+`DEL /wallet/:id/shared-key`
 
-##GET /wallet/:id/key/:address 
+### Body Parameters
+Paramter | Description
+---------| --------------
+accountKey <br> _string_ | xpubkey to add to the multisig wallet
+
+
+##GET /wallet/:id/key/:address
 
 Get wallet key by address.
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/:id/key/:address` 
+`GET /wallet/:id/key/:address`
 
-##GET /wallet/:id/wif/:address 
+##GET /wallet/:id/wif/:address
 
 Get wallet private key (WIF format) by address.
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/:id/wif/:address` 
+`GET /wallet/:id/wif/:address`
 
-##POST /wallet/:id/address 
+##POST /wallet/:id/address
 
-> Sample response: 
+> Sample response:
 
-```json 
+```json
 {
   "network": "testnet",
   "wid": 1,
@@ -806,31 +891,31 @@ Get wallet private key (WIF format) by address.
 
 Derive new receiving address for account.
 
-### HTTP Request 
+### HTTP Request
 
-`POST /wallet/:id/address` 
+`POST /wallet/:id/address`
 
-##POST /wallet/:id/change 
+##POST /wallet/:id/change
 
 Derive new change address for account.
 
-### HTTP Request 
+### HTTP Request
 
-`POST /wallet/:id/change` 
+`POST /wallet/:id/change`
 
-##POST /wallet/:id/nested 
+##POST /wallet/:id/nested
 
 Derive new nested p2sh receiving address for account.
 
-### HTTP Request 
+### HTTP Request
 
-`POST /wallet/:id/nested` 
+`POST /wallet/:id/nested`
 
-##GET /wallet/:id/balance 
+##GET /wallet/:id/balance
 
-> Sample response: 
+> Sample response:
 
-```json 
+```json
 {
   "wid": 1,
   "id": "foo",
@@ -842,53 +927,53 @@ Derive new nested p2sh receiving address for account.
 
 Get wallet or account balance.
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/:id/balance` 
+`GET /wallet/:id/balance`
 
-##GET /wallet/:id/coin 
+##GET /wallet/:id/coin
 
 List all wallet coins available.
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/:id/coin` 
+`GET /wallet/:id/coin`
 
-##GET /wallet/:id/locked 
+##GET /wallet/:id/locked
 
-> Sample response: 
+> Sample response:
 
-```json 
+```json
 [{"hash":"dd1a110edcdcbb3110a1cbe0a545e4b0a7813ffa5e77df691478205191dad66f","index":0}]
 ```
 
 Get all locked outpoints.
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/:id/locked` 
+`GET /wallet/:id/locked`
 
-##PUT /wallet/:id/locked/:hash/:index 
+##PUT /wallet/:id/locked/:hash/:index
 
 Lock outpoints.
 
-### HTTP Request 
+### HTTP Request
 
-`PUT /wallet/:id/locked/:hash/:index` 
+`PUT /wallet/:id/locked/:hash/:index`
 
-##DEL /wallet/:id/locked/:hash/:index 
+##DEL /wallet/:id/locked/:hash/:index
 
 Unlock outpoints.
 
-### HTTP Request 
+### HTTP Request
 
-`DEL /wallet/:id/locked/:hash/:index` 
+`DEL /wallet/:id/locked/:hash/:index`
 
-##GET /wallet/:id/coin/:hash/:index 
+##GET /wallet/:id/coin/:hash/:index
 
-> Sample response: 
+> Sample response:
 
-```json 
+```json
 [
   {
     "version": 1,
@@ -905,6 +990,6 @@ Unlock outpoints.
 
 Get wallet coins.
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/:id/coin/:hash/:index` 
+`GET /wallet/:id/coin/:hash/:index`
