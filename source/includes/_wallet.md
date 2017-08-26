@@ -699,26 +699,55 @@ Parameters | Description
 id <br> _string_ | id of wallet to query blocks with its transactions in it
 
 ##GET /wallet/:id/block/:height 
+```javascript
+let id, height;
+```
+
+```shell--vars
+id="foo"
+height=1179720
+```
+
+```shell--cli
+bcoin cli wallet --id=$id block $height
+```
+
+```shell--curl
+curl $url/wallet/block/$height
+```
+
+```javascript
+const httpWallet = new bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const blockInfo = await httpWallet.getWalletBlock(height);
+  console.log(blockInfo);
+})
+```
 
 > Sample response: 
 
 ```json 
 {
-  "hash": "39864ce2f29635638bbdc3e943b3a182040fdceb6679fa3dabc8c827e05ff6a7",
-  "height": 3,
-  "time": 1485471341,
+  "hash": "0000000000013cc12ea4b3ff403a3c05d96da695638e468cf26409eca87beb6a",
+  "height": 1179720,
+  "time": 1503359756,
   "hashes": [
-    "dd1a110edcdcbb3110a1cbe0a545e4b0a7813ffa5e77df691478205191dad66f"
+    "2c3d708bc21358e0a8a112ab00267ede0992d85add295d622e2b2c58b2c6720d"
   ]
 }
 ```
 
-Get block info by height. Contains a list of all wallet txs included in the
-block.
+Get block info by height. 
 
 ### HTTP Request 
 
 `GET /wallet/:id/block/:height` 
+
+Paramaters | Description
+-----------| -------------
+id <br> _string_ | id of wallet which has tx in the block being queried
+height <br> _int_ | height of block being queried 
 
 ##PUT /wallet/:id/shared-key 
 
