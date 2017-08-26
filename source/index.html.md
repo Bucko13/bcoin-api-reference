@@ -26,6 +26,7 @@ includes:
   - transaction
   - wallet_admin
   - wallet
+  - wallet_tx
   - wallet_accounts
   - errors
 

@@ -136,6 +136,53 @@ e.g. To get information from a wallet that requires a token
 
 `GET /wallet/primary/tx/:hash?token=977fbb8d212a1e78c7ce9dfda4ff3d7cc8bcd20c4ccf85d2c9c84bbef6c88b3c`
 
+## Reset Authentication Token
+```javascript
+let id, passphrase;
+```
+
+```shell--vars
+id='foo'
+passphrase="bar"
+```
+
+```shell--cli
+bcoin cli wallet retoken --id=$id --passphrase=$passphrase
+```
+
+```shell--curl
+curl $url/wallet/$id/retoken \
+  -X POST
+  --data '{"passphrase":'$passphrase'}"
+```
+
+```javascript
+const wallet = new bcoin.http.Wallet({ id: id });
+
+(async () => { 
+  const token = await wallet.retoken(passphrase);
+  console.log(token);
+})();
+```
+
+> Sample response: 
+
+```json 
+{
+  "token": "2d04e217877f15ba920d02c24c6c18f4d39df92f3ae851bec37f0ade063244b2"
+}
+```
+
+Derive a new wallet token, required for access of this particular wallet.
+
+<aside class="warning">
+Note: if you happen to lose the returned token, you will not be able to access the wallet.
+</aside>
+
+
+### HTTP Request 
+
+`POST /wallet/:id/retoken`
 
 ## Get Wallet Info
 
@@ -609,55 +656,7 @@ Paramter | Description
 -------- | -------------------------
 id <br> _string_ | id of target wallet to import key into
 address <br> _string_ | Base58Check encoded address
-
-
-## Reset Authentication Token
-```javascript
-let id, passphrase;
-```
-
-```shell--vars
-id='foo'
-passphrase="bar"
-```
-
-```shell--cli
-bcoin cli wallet retoken --id=$id --passphrase=$passphrase
-```
-
-```shell--curl
-curl $url/wallet/$id/retoken \
-  -X POST
-  --data '{"passphrase":'$passphrase'}"
-```
-
-```javascript
-const wallet = new bcoin.http.Wallet({ id: id });
-
-(async () => { 
-  const token = await wallet.retoken(passphrase);
-  console.log(token);
-})();
-```
-
-> Sample response: 
-
-```json 
-{
-  "token": "2d04e217877f15ba920d02c24c6c18f4d39df92f3ae851bec37f0ade063244b2"
-}
-```
-
-Derive a new wallet token, required for access of this particular wallet.
-
-<aside class="warning">
-Note: if you happen to lose the returned token, you will not be able to access the wallet.
-</aside>
-
-
-### HTTP Request 
-
-`POST /wallet/:id/retoken` 
+ 
 
 ## Send a transaction
 
@@ -859,6 +858,10 @@ const options = {
 Create and template a transaction (useful for multisig).
 Do not broadcast or add to wallet.
 
+### HTTP Request 
+
+`POST /wallet/:id/create` 
+
 ### Post Paramters
 Paramter | Description
 --------- | ----------------
@@ -875,9 +878,6 @@ value <br> _int_ | Value to send in bitcoin (as of beta-1.14)
 address <br> _string_ | destination address for transaction 
 
 
-### HTTP Request 
-
-`POST /wallet/:id/create` 
 
 ## Sign Transaction
 ```javascript
