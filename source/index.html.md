@@ -1,6 +1,8 @@
 ---
 title: Bcoin API Reference
 
+home_link: http://bcoin.io
+
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell--curl: cURL
   - shell--cli: CLI
