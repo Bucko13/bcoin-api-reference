@@ -569,7 +569,7 @@ curl $url/wallet/$id/import \
 ```javascript
 const wallet = new bcoin.http.Wallet({ id: id });
 (async () => {
-  const response = await wallet.importKey(account, key);
+  const response = await wallet.importPrivate(account, key);
   console.log(response);
 })();
 ```
