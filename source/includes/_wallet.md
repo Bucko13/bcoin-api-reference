@@ -688,7 +688,7 @@ const httpWallet = new bcoin.http.wallet({ id: id });
 [ 1179720, 1179721, 1180146, 1180147, 1180148, 1180149 ]
 ```
 
-List all block heights which contain any wallet txs. Returns an array of block heights
+List all block heights which contain any wallet transactions. Returns an array of block heights
 
 ### HTTP Request
 
@@ -850,21 +850,112 @@ Paramter | Description
 accountKey <br> _string_ | xpubkey to add to the multisig wallet
 
 
-##GET /wallet/:id/key/:address
+## Get Public Key By Address
+```javascript
+let id, address;
+```
 
-Get wallet key by address.
+```shell--vars
+id="foo"
+address="n1EDbjFaKFwz2XwWPueDUac4XZsQg8d1p2"
+```
+
+```shell--cli
+bcoin cli wallet --id=$id key $address
+```
+
+```shell--curl
+curl $url/wallet/$id/key/$address
+```
+
+```javascript
+const httpWallet = bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.getKey(address);
+  console.log(response);
+})();
+```
+
+> Sample Response
+
+```json
+{
+  "network": "testnet",
+  "wid": 8,
+  "id": "foo",
+  "name": "default",
+  "account": 0,
+  "branch": 0,
+  "index": 7,
+  "witness": false,
+  "nested": false,
+  "publicKey": "032b110a0f83d45c1010cf03adea64b440d83a1a3726f7c2d5e94db1d6509b3ac6",
+  "script": null,
+  "program": null,
+  "type": "pubkeyhash",
+  "address": "n1EDbjFaKFwz2XwWPueDUac4XZsQg8d1p2"
+}
+```
+
+Get wallet key by address. Returns wallet information with address and public key
 
 ### HTTP Request
 
 `GET /wallet/:id/key/:address`
 
-##GET /wallet/:id/wif/:address
+Parameters | Description
+-----------| --------------
+id <br> _string_ | id of wallet that holds the address being queried
+address <br> _string> | Base58 encoded address to get corresponding public key for
 
-Get wallet private key (WIF format) by address.
+## Get Private Key By Address
+```javascript
+let id, address;
+```
+
+```shell--vars
+id="foo"
+address="n1EDbjFaKFwz2XwWPueDUac4XZsQg8d1p2"
+```
+
+```shell--cli
+bcoin cli wallet --id=$id dump $address
+```
+
+```shell--curl
+curl $url/wallet/$id/wif/$address
+```
+
+```javascript
+const httpWallet = bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.getWIF(address);
+  console.log(response);
+})();
+```
+
+> Sample Response
+
+```json
+{
+  "privateKey": "cTMUJ7WeFsoQ6dLGR9xdLZeNQafcU88bbibR9TV3W2HheRntYa53"
+}
+
+```
+
+Get wallet private key (WIF format) by address. Returns just the private key
 
 ### HTTP Request
 
 `GET /wallet/:id/wif/:address`
+
+Parameters | Description
+-----------| --------------
+id <br> _string_ | id of wallet that holds the address being queried
+address <br> _string> | Base58 encoded address to get corresponding public key for
+
 
 ##POST /wallet/:id/address
 
