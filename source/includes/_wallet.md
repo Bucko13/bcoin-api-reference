@@ -957,7 +957,31 @@ id <br> _string_ | id of wallet that holds the address being queried
 address <br> _string> | Base58 encoded address to get corresponding public key for
 
 
-##POST /wallet/:id/address
+## Generate Receiving Address
+```javascript
+let id, account;
+```
+
+```shell--vars
+id="foo"
+account="default"
+```
+
+```shell--cli
+bcoin cli wallet --id=$id address
+```
+
+```shell--curl
+curl $url/wallet/$id/address -X POST --data '{"account":"'$account'"}'
+```
+
+```javascript
+const httpWallet = new bcoin.http.Wallet({ id: id });
+(async () => {
+  const receiveAddress = await httpWallet.createAddress(account);
+  console.log(receiveAddress);
+})();
+```
 
 > Sample response:
 
@@ -982,17 +1006,79 @@ address <br> _string> | Base58 encoded address to get corresponding public key f
 
 Derive new receiving address for account.
 
+<aside class="notice">
+Note that, except for the CLI which assumes 'default' account, an account must be passed for the call to work.
+</aside>
+
 ### HTTP Request
 
 `POST /wallet/:id/address`
 
-##POST /wallet/:id/change
+### Post Paramters
+Parameter | Description
+--------- | -------------
+account <br>_string_ | BIP44 account to generate address from
 
+## Generate Change Address
+```javascript
+let id, account;
+```
+
+```shell--vars
+id="foo"
+account="default"
+```
+
+```shell--cli
+bcoin cli wallet --id=$id change
+```
+
+```shell--curl
+curl $url/wallet/$id/change -X POST --data '{"account":"'$account'"}'
+```
+
+```javascript
+const httpWallet = new bcoin.http.Wallet({ id: id });
+(async () => {
+  const receiveAddress = await httpWallet.createChange(account);
+  console.log(receiveAddress);
+})();
+```
+
+> Sample response:
+
+```json
+{
+  "network": "testnet",
+  "wid": 8,
+  "id": "foo",
+  "name": "default",
+  "account": 0,
+  "branch": 1,
+  "index": 7,
+  "witness": false,
+  "nested": false,
+  "publicKey": "022f5afafcc8c35dbbbe52842d58dc18d739f2dea85021ea1e9183031032f9fa1c",
+  "script": null,
+  "program": null,
+  "type": "pubkeyhash",
+  "address": "mgdArtHtCsxvcjzxRTMfk5ZyBcnsTgNKTT"
+}
+```
 Derive new change address for account.
+
+<aside class="info">
+Note that, except for the CLI which assumes 'default' account, an account must be passed for the call to work.
+</aside>
 
 ### HTTP Request
 
 `POST /wallet/:id/change`
+
+### Post Paramters
+Parameter | Description
+--------- | -------------
+account <br>_string_ | BIP44 account to generate address from
 
 ##POST /wallet/:id/nested
 
