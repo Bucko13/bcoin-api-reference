@@ -23,7 +23,7 @@
     "changeAddress": "n3nFYgQR2mrLwC3X66xHNsx4UqhS3rkSnY",
     "accountKey": "tpubDC5u44zLNUVo2gPVdqCbtX644PKccH5VZB3nqUgeCiwKoi6BQZGtr5d6hhougcD6PqjszsbR3xHrQ5k8yTbUt64aSthWuNdGi7zSwfGVuxc",
     "keys": []
-  } 
+  }
 
 ```
 Represents a BIP44 Account belonging to a Wallet.
@@ -55,7 +55,7 @@ From the [BIP44 Specification](https://github.com/bitcoin/bips/blob/master/bip-0
 ## Get Wallet Account List
 
 ```shell--vars
-id='test' 
+id='test'
 ```
 
 ```shell--cli
@@ -70,17 +70,17 @@ const client = new bcoin.http.Client();
 })();
 ```
 
-> Sample response: 
+> Sample response:
 
-```json 
+```json
 [
   "default"
 ]
 ```
 
-List all account names (array indicies map directly to bip44 account indicies) associated with a specific wallet id.
+List all account names (array indices map directly to bip44 account indices) associated with a specific wallet id.
 
-### HTTP Request 
+### HTTP Request
 
 `GET /wallet/:id/account`
 
@@ -119,9 +119,9 @@ const client = new bcoin.http.Client();
 })();
 ```
 
-> Sample response: 
+> Sample response:
 
-```json 
+```json
 {
   "wid": 1,
   "id": "test",
@@ -147,9 +147,9 @@ const client = new bcoin.http.Client();
 
 Get account info.
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/:id/account/:account` 
+`GET /wallet/:id/account/:account`
 
 Parameters | Description
 ---------- | -----------
@@ -159,37 +159,38 @@ account <br> _string_ | id of account you would to retrieve information for
 ## Create new wallet account
 
 ```javascript
-let id, name;
+let id, name, type;
 ```
 
 ```shell--vars
 id='test'
 name='menace'
+type='multisig'
 ```
 
 ```shell--cli
-bcoin cli wallet --id=$id account create $name --type=multisig
+bcoin cli wallet --id=$id account create $name --type=$type
 ```
 
 ```shell--curl
 curl $url/wallet/$id/account/$name \
     -X PUT
-    --data '{"type": "multisig"}'
+    --data '{"type": "'$type"}'
 ```
 
 ```javascript
-const client = new bcoin.http.Client();
-const options = {type: 'multisig'};// options are the same as available wallet options
+const httpWallet = new bcoin.http.Wallet({ id: id });
+const options = {type: type}
 
 (async () => {
-  const account = await client.createAccount(name, options);
+  const account = await httpWallet.createAccount(name, options);
   console.log(account);
-});
+})();
 ```
 
-> Sample response: 
+> Sample response:
 
-```json 
+```json
 {
   "wid": 1,
   "id": "test",
@@ -215,6 +216,16 @@ const options = {type: 'multisig'};// options are the same as available wallet o
 
 Create account with specified account name.
 
-### HTTP Request 
+### HTTP Request
 
-`PUT /wallet/:id/account/:name` 
+`PUT /wallet/:id/account/:name`
+
+### Options object
+Parameter | Description
+--------- | -----------------
+name <br> _string_ | name to give the account. Option can be `account` or `name`
+witness <br> _bool_ | whether or not to act as segregated witness wallet account
+watchOnly <br> _bool_ | whether or not to make watch only account. Watch only accounts can't accept private keys for import (or sign transactions)
+type <br> _string_ | what type of wallet to make it ('multisig', 'pubkeyhash')
+m <br> _int_ | for multisig accounts, what to make `m` in m-of-n
+n <br> _int_ | for multisig accounts, what to make the `n` in m-of-n

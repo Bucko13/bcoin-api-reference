@@ -661,10 +661,10 @@ curl $url/wallet/$id/import \
 ```
 
 ```javascript
-const wallet = new bcoin.http.Wallet({ id: id });
+const httpWallet = new bcoin.http.Wallet({ id: id });
 
 (async () => {
-  const response = await wallet.importAddress(id, account, address)
+  const response = await httpWallet.importAddress(account, address)
 })();
 ```
 
@@ -753,7 +753,7 @@ curl $url/wallet/block/$height
 const httpWallet = new bcoin.http.Wallet({ id: id });
 
 (async () => {
-  const blockInfo = await httpWallet.getWalletBlock(height);
+  const blockInfo = await httpWallet.getBlock(height);
   console.log(blockInfo);
 })
 ```
@@ -785,12 +785,12 @@ height <br> _int_ | height of block being queried
 
 ## Add xpubkey (Multisig)
 ```javascript
-let id, key;
+let id, key, account;
 ```
 
 ```shell--vars
 id="multi-foo"
-key=""
+key="tpubDCUQshhR98hjDDPtefuQdg4Dmpk5mes3TRyUp1Qa4BjxCVytfqmqNWmJ3tUZfqu4qLfEypQhNcpMF3yhZJ8h8hcahnxCzrqWmV5qVHHTqGM"
 ```
 
 ```shell--cli
@@ -805,7 +805,7 @@ curl $url/wallet/$id/shared-key \
 
 ```javascript
 const httpWallet = new bcoin.http.wallet({ id: id });
-const account = 'default';
+account = 'default';
 
 (async () => {
   const response = await httpWallet.addSharedKey(account, key);
@@ -823,6 +823,10 @@ const account = 'default';
 
 Add a shared xpubkey to wallet. Must be a multisig wallet.
 
+<aside class="notice">
+Note that since it must be a multisig, the wallet on creation should be set with <code>m</code> and <code>x</code> where <code>n</code> is greater than 1 (since the first key is always that wallet's own xpubkey)
+</aside>
+
 ### HTTP Request
 
 `PUT /wallet/:id/shared-key`
@@ -831,6 +835,7 @@ Add a shared xpubkey to wallet. Must be a multisig wallet.
 Paramter | Description
 ---------| --------------
 accountKey <br> _string_ | xpubkey to add to the multisig wallet
+account <br> _string_ | multisig account to add the xpubkey to
 
 ## Remove xpubkey (Multisig)
 
@@ -840,7 +845,7 @@ let id, key;
 
 ```shell--vars
 id="multi-foo"
-key=""
+key="tpubDCUQshhR98hjDDPtefuQdg4Dmpk5mes3TRyUp1Qa4BjxCVytfqmqNWmJ3tUZfqu4qLfEypQhNcpMF3yhZJ8h8hcahnxCzrqWmV5qVHHTqGM"
 ```
 
 ```shell--cli
@@ -881,6 +886,7 @@ Remove shared xpubkey from wallet if present.
 Paramter | Description
 ---------| --------------
 accountKey <br> _string_ | xpubkey to add to the multisig wallet
+account <br> _string_ | multisig account to remove the key from
 
 
 ## Get Public Key By Address
@@ -1115,7 +1121,10 @@ account <br>_string_ | BIP44 account to generate address from
 
 ##POST /wallet/:id/nested
 
-Derive new nested p2sh receiving address for account.
+Derive new nested p2sh receiving address for account. Note that this can't be done on a non-witness account otherwise you will receive the following error:
+
+`[error] (node) Cannot derive nested on non-witness account.`
+
 
 ### HTTP Request
 
