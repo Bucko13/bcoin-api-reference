@@ -110,7 +110,7 @@ passphrase <br> _string_ | passphrase to unlock the account
 ### Output object
 Property | Description
 --------- | -----------
-value <br> _int_ | Value to send in satoshisx
+value <br> _int_ | Value to send in satoshis
 address <br> _string_ | destination address for transaction
 
 ## Create a Transaction
