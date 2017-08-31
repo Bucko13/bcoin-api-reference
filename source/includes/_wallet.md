@@ -10,11 +10,11 @@ url="http://localhost:18332"
 ```
 
 ```shell--curl
-curl $url/wallet/primary/
+curl $url/wallet/$id/
 ```
 
 ```shell--cli
-bcoin cli wallet get
+bcoin cli wallet get --id=$id
 ```
 
 ```javascript
@@ -225,7 +225,8 @@ curl $url/wallet/$id/
 ```
 
 ```shell--cli
-bcoin cli wallet get --id=test --network=testnet
+# ID defaults to `primary` if none is passed
+bcoin cli wallet get --id=$id
 ```
 
 ```javascript
@@ -283,7 +284,7 @@ const id = 'foo';
 }
 ```
 
-Get wallet info by ID.
+Get wallet info by ID. If no id is passed in the CLI it assumes an id of `primary`.
 
 ### HTTP Request
 `GET /wallet/:id`
@@ -824,7 +825,7 @@ account = 'default';
 Add a shared xpubkey to wallet. Must be a multisig wallet.
 
 <aside class="notice">
-Note that since it must be a multisig, the wallet on creation should be set with <code>m</code> and <code>x</code> where <code>n</code> is greater than 1 (since the first key is always that wallet's own xpubkey)
+Note that since it must be a multisig, the wallet on creation should be set with <code>m</code> and <code>n</code> where <code>n</code> is greater than 1 (since the first key is always that wallet's own xpubkey)
 </aside>
 
 ### HTTP Request
@@ -835,7 +836,7 @@ Note that since it must be a multisig, the wallet on creation should be set with
 Paramter | Description
 ---------| --------------
 accountKey <br> _string_ | xpubkey to add to the multisig wallet
-account <br> _string_ | multisig account to add the xpubkey to
+account <br> _string_ | multisig account to add the xpubkey to (default='default')
 
 ## Remove xpubkey (Multisig)
 
@@ -886,7 +887,7 @@ Remove shared xpubkey from wallet if present.
 Paramter | Description
 ---------| --------------
 accountKey <br> _string_ | xpubkey to add to the multisig wallet
-account <br> _string_ | multisig account to remove the key from
+account <br> _string_ | multisig account to remove the key from (default='default')
 
 
 ## Get Public Key By Address
