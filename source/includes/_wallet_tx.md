@@ -3,33 +3,35 @@
 ## Send a transaction
 
 ```javascript
-let id, rate, value, address;
+let id, passphrase, rate, value, address;
 ```
 
 ```shell--vars
-id='foo'
+id="foo"
+passphrase="bar"
 rate=100
-value=.3
+value=3000
 address="moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA"
 ```
 
 ```shell--cli
-bcoin cli wallet send --id=$id --value=$value --address=$address
+bcoin cli wallet send --id=$id --value=$value --address=$address ---passphrase=$passphrase
 ```
 
 ```shell--curl
 curl $url/wallet/$id/send \
   -X POST \
   --data '{
+    "passphrase":"'$passphrase'",
     "rate":'$rate',
     "outputs":[
       {"address":"'$address'", "value":'$value'}
-    ] 
+    ]
   }'
 ```
 
 ```javascript
-const httpWallet = bcoin.http.wallet({ id: id });
+const httpWallet = bcoin.http.Wallet({ id: id });
 const options = {
   rate: rate,
   outputs: [{ value: value, address; address }]
@@ -41,9 +43,9 @@ const options = {
 })();
 ```
 
-> Sample response: 
+> Sample response:
 
-```json 
+```json
 {
 {
   "wid": 13,
@@ -91,9 +93,9 @@ const options = {
 
 Create, sign, and send a transaction.
 
-### HTTP Request 
+### HTTP Request
 
-`POST /wallet/:id/send` 
+`POST /wallet/:id/send`
 
 ### Post Paramaters
 Parameter | Description
@@ -108,52 +110,56 @@ passphrase <br> _string_ | passphrase to unlock the account
 ### Output object
 Property | Description
 --------- | -----------
-value <br> _int_ | Value to send in bitcoin (as of beta-1.14)
-address <br> _string_ | destination address for transaction 
+value <br> _int_ | Value to send in satoshis
+address <br> _string_ | destination address for transaction
 
 ## Create a Transaction
 ```javascript
-let id, rate, value, address;
+let id, rate, value, address, passphrase;
 ```
 
 ```shell--vars
-id='foo'
+id="foo"
+passphrase="bar"
 rate=100
 value=.3
 address="moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA"
 ```
 
 ```shell--cli
-bcoin cli wallet mktx --id=$id --rate=$rate --value=$value --address=$address
+bcoin cli wallet mktx --id=$id --rate=$rate --value=$value --address=$address --passphrase=$passphrase
 ```
 
 ```shell--curl
 curl $url/wallet/$id/create \
   -X POST \
   --data '{
-    "rate":'$rate',
+    "rate":"'$rate'",
+    "passphrase": "'$passphrase'"
     "outputs":[
       {"address":"'$address'", "value":'$value'}
-    ] 
+    ]
   }'
 ```
 
 ```javascript
-const httpWallet = new bcoin.http.wallet({ id: id });
-const outputs: [{ value: value, address; address }]
+const httpWallet = new bcoin.http.Wallet({ id: id });
+const outputs = [{ value: value, address: address }]
 const options = {
+  passphrase: passphrase,
+  outputs: outputs,
   rate: rate,
 };
 
 (async () => {
-  const tx = await httpWallet.createTX(options, outputs);
+  const tx = await httpWallet.createTX(options);
   console.log(tx);
 })();
 ```
 
-> Sample response: 
+> Sample response:
 
-```json 
+```json
 {
   "hash": "0799a1d3ebfd108d2578a60e1b685350d42e1ef4d5cd326f99b8bf794c81ed17",
   "witnessHash": "0799a1d3ebfd108d2578a60e1b685350d42e1ef4d5cd326f99b8bf794c81ed17",
@@ -200,9 +206,9 @@ const options = {
 Create and template a transaction (useful for multisig).
 Do not broadcast or add to wallet.
 
-### HTTP Request 
+### HTTP Request
 
-`POST /wallet/:id/create` 
+`POST /wallet/:id/create`
 
 ### Post Paramters
 Paramter | Description
@@ -217,7 +223,7 @@ passphrase <br> _string_ | passphrase to unlock the account
 Property | Description
 --------- | -----------
 value <br> _int_ | Value to send in bitcoin (as of beta-1.14)
-address <br> _string_ | destination address for transaction 
+address <br> _string_ | destination address for transaction
 
 
 
@@ -233,7 +239,7 @@ tx="01000000010d72c6b2582c2b2e625d29dd5ad89209de7e2600ab12a1a8e05813c28b703d2c00
 ```
 
 ```shell--cli
-bcoin cli wallet sign --id=$id --passphrase=$passphrase --tx=$tx 
+bcoin cli wallet sign --id=$id --passphrase=$passphrase --tx=$tx
 ```
 
 ```shell--curl
@@ -299,9 +305,9 @@ const options = { passphrase: passphrase };
 
 Sign a templated transaction (useful for multisig).
 
-### HTTP Request 
+### HTTP Request
 
-`POST /wallet/:id/sign` 
+`POST /wallet/:id/sign`
 
 ### Post Paramters
 Parameter | Description
@@ -335,7 +341,7 @@ curl $url/wallet/$id/zap \
 ```
 
 ```javascript
-const httpWallet = new bcoin.http.wallet({ id: id });
+const httpWallet = new bcoin.http.Wallet({ id: id });
 
 (async () => {
   const response = httpWallet.zap(account, age);
@@ -354,9 +360,9 @@ const httpWallet = new bcoin.http.wallet({ id: id });
 
 Remove all pending transactions older than a specified age.
 
-### HTTP Request 
+### HTTP Request
 
-`POST /wallet/:id/zap?age=3600` 
+`POST /wallet/:id/zap?age=3600`
 
 ### Post Parameters
 Paramaters | Description
@@ -380,63 +386,63 @@ passphrase="bar"
 ```
 
 ```shell--curl
-curl $url/wallet/$id/tx/$hash \ 
+curl $url/wallet/$id/tx/$hash \
   -X DELETE \
   --data '{"passphrase": "'$passphrase'"}'
 ```
 
 ```javascript
- // Not available in javascript wallet client. 
+ // Not available in javascript wallet client.
 ```
 
 Abandon single pending transaction. Confirmed transactions will throw an error.
 `"TX not eligible"`
 
-### HTTP Request 
+### HTTP Request
 
-`DEL /wallet/:id/tx/:hash` 
+`DEL /wallet/:id/tx/:hash`
 
 Paramters | Description
 ----------| --------------------
 id <br> _string_ | id of wallet where the transaction is that you want to remove
 hash <br> _string_ | hash of transaction you would like to remove.
 
-##GET /wallet/:id/tx/history 
+##GET /wallet/:id/tx/history
 
 Get wallet TX history. Returns array of tx details.
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/:id/tx/history` 
+`GET /wallet/:id/tx/history`
 
-##GET /wallet/:id/tx/unconfirmed 
+##GET /wallet/:id/tx/unconfirmed
 
 Get pending wallet transactions. Returns array of tx details.
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/:id/tx/unconfirmed` 
+`GET /wallet/:id/tx/unconfirmed`
 
-##GET /wallet/:id/tx/range 
+##GET /wallet/:id/tx/range
 
 Get range of wallet transactions by timestamp. Returns array of tx details.
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/:id/tx/range` 
+`GET /wallet/:id/tx/range`
 
-##GET /wallet/:id/tx/last 
+##GET /wallet/:id/tx/last
 
 Get last N wallet transactions.
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/:id/tx/last` 
+`GET /wallet/:id/tx/last`
 
-##GET /wallet/:id/tx/:hash 
+##GET /wallet/:id/tx/:hash
 
 Get wallet transaction details.
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/:id/tx/:hash` 
+`GET /wallet/:id/tx/:hash`

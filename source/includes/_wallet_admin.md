@@ -1,5 +1,5 @@
 # Wallet Admin
-The _admin namespace exists to differentiate administrative level tasks on the wallet API that you probably don't want to expose to individual wallets. 
+The _admin namespace exists to differentiate administrative level tasks on the wallet API that you probably don't want to expose to individual wallets.
 
 `/wallet/_admin/[TARGET_ACTION]`
 
@@ -53,8 +53,7 @@ Initiates a blockchain rescan for the walletdb. Wallets will be rolled back to t
 ## Wallet Resend
 ```shell--curl
 curl $url/wallet/_admin/resend \
--X POST 
---data "{}"
+-X POST
 ```
 
 ```shell--cli
@@ -80,9 +79,9 @@ const client = new bcoin.http.Client({
 
 Rebroadcast all pending transactions in all wallets.
 
-### HTTP Request 
+### HTTP Request
 
-`POST /wallet/_admin/resend` 
+`POST /wallet/_admin/resend`
 
 ##Wallet Backup
 ```javascript
@@ -94,9 +93,9 @@ path='/path/to/new/backup'
 ```
 
 ```shell--curl
-curl $url/wallet/_admin/backup?path=/home/user/walletdb-backup.ldb \ 
+curl $url/wallet/_admin/backup?path=/home/user/walletdb-backup.ldb \
   -X POST \
-``
+```
 
 ```shell--cli
 bcoin cli backup $path
@@ -121,9 +120,9 @@ const client = new bcoin.http.Client({
 
 Safely backup the wallet database to specified path (creates a clone of the database).
 
-### HTTP Request 
+### HTTP Request
 
-`POST /wallet/_admin/backup?path=/home/user/walletdb-backup.ldb` 
+`POST /wallet/_admin/backup?path=/home/user/walletdb-backup.ldb`
 
 ## List all Wallets
 
@@ -158,6 +157,6 @@ const client = new bcoin.http.Client({
 
 List all wallet IDs. Returns an array of strings.
 
-### HTTP Request 
+### HTTP Request
 
-`GET /wallet/_admin/wallets`  
+`GET /wallet/_admin/wallets`

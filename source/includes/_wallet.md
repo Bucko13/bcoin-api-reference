@@ -1,5 +1,31 @@
 # Wallet
 ## The WalletDB and Object
+```javascript
+let id, url;
+```
+
+```shell--vars
+id="primary"
+url="http://localhost:18332"
+```
+
+```shell--curl
+curl $url/wallet/$id/
+```
+
+```shell--cli
+bcoin cli wallet get --id=$id
+```
+
+```javascript
+const httpWallet = new bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const wallet = await httpWallet.getInfo();
+  console.log(wallet);
+})();
+```
+
 
 > The wallet object will look something like this:
 
@@ -7,7 +33,7 @@
 {
   "network": "testnet",
   "wid": 1,
-  "id": "foo",
+  "id": "primary",
   "initialized": true,
   "watchOnly": false,
   "accountDepth": 1,
@@ -44,7 +70,7 @@
 }
 ```
 
-Bcoin maintains a wallet database which contains every wallet. Wallets are not usable without also using a wallet database. For testing, the wallet database can be in-memory, but it must be there.
+Bcoin maintains a wallet database which contains every wallet. Wallets are not usable without also using a wallet database. For testing, the wallet database can be in-memory, but it must be there. Wallets are uniquely identified by an id and the walletdb is created with a default id of `primary`. (See [Create a Wallet](#create-a-wallet) below for more details.)
 
 Wallets in bcoin use bip44. They also originally supported bip45 for multisig, but support was removed to reduce code complexity, and also because bip45 doesn't seem to add any benefit in practice.
 
@@ -98,11 +124,11 @@ let token, id;
 
 ```shell--vars
 token='977fbb8d212a1e78c7ce9dfda4ff3d7cc8bcd20c4ccf85d2c9c84bbef6c88b3c'
-id='primary'
+id='foo'
 ```
 
 ```shell--curl
-curl $url/wallet/$id/send \
+curl $url/wallet/$id \
     -H 'Content-Type: application/json' \
     -d '{ "token": "$token" ... }'
 ```
@@ -185,29 +211,37 @@ Note: if you happen to lose the returned token, you will not be able to access t
 `POST /wallet/:id/retoken`
 
 ## Get Wallet Info
+```javascript
+let id;
+```
+
+```shell--vars
+id='foo'
+```
 
 ```shell--curl
-curl http://localhost:18332/wallet/test/
+curl $url/wallet/$id/
 
 ```
 
 ```shell--cli
-bcoin cli wallet get --id=test --network=testnet
+# ID defaults to `primary` if none is passed
+bcoin cli wallet get --id=$id
 ```
 
 ```javascript
 `use strict`
 
-const client = new bcoin.http.Client({  network: 'testnet' });
+const httpWallet = new bcoin.http.Wallet({ id: id });
 const id = 'foo';
 
 (async () => {
-  const wallet = await client.getWallet(id);
+  const wallet = await httpWallet.getWalletInfo();
   console.log(wallet);
 })();
 ```
 
-> Output is same as wallet object above
+> Sample output
 
 ```json
 {
@@ -250,7 +284,7 @@ const id = 'foo';
 }
 ```
 
-Get wallet info by ID.
+Get wallet info by ID. If no id is passed in the CLI it assumes an id of `primary`.
 
 ### HTTP Request
 `GET /wallet/:id`
@@ -313,31 +347,33 @@ Parameters | Description
 ---------- | -----------
 id <br> _string_ | named id of the wallet whose info you would like to retrieve
 
-## Create New Wallet
+## Create A Wallet
 
 ```javascript
-let id, witness;
+let id, passphrase, witness;
 ```
 
 ```shell--vars
 id = 'foo'
+passphrase = 'bar'
 witness = false
 ```
 
 ```shell--curl
 curl $url/wallet/$id \
   -X PUT \
-  --data '{"witness":'$witness'}'
+  --data '{"witness":'$witness', "passphrase":"'$passphrase'"}'
 ```
 
 ```shell--cli
-bcoin cli wallet create $id --witness=$witness
+bcoin cli wallet create $id --witness=$witness --passphrase=$passphrase
 ```
 
 ```javascript
 const client = new bcoin.http.Client();
 const options = {
   id: id,
+  passphrase: passphrase,
   witness: witness
 };
 
@@ -416,7 +452,7 @@ newPass='newpass123'
 ```
 
 ```shell--cli
-> No command available
+> No cli command available
 ```
 
 ```shell-curl
@@ -426,10 +462,10 @@ curl $url/wallet/$id/passphrase \
 ```
 
 ```javascript
-const client = new bcoin.http.CLient();
+const httpWallet = new bcoin.http.Wallet({ id: id });
 
 (async () => {
-  const response = await client.setPassphrase(id, oldPass, newPass);
+  const response = await httpWallet.setPassphrase(oldPass, newPass);
   console.log(response);
 });
 ```
@@ -450,7 +486,7 @@ Change wallet passphrase. Encrypt if unencrypted.
 Paramters | Description
 --------- | ---------------------
 old <br> _string_ | Old passphrase. Pass in empty string if none
-passphrase <br> _string | New passphrase
+new <br> _string | New passphrase
 
 <aside class="notice">
   Note that the old passphrase is still required even if none was set prior. In this case, an empty string should be passed for the old passphrase.
@@ -628,10 +664,10 @@ curl $url/wallet/$id/import \
 ```
 
 ```javascript
-const wallet = new bcoin.http.Wallet({ id: id });
+const httpWallet = new bcoin.http.Wallet({ id: id });
 
 (async () => {
-  const response = await wallet.importAddress(id, account, address)
+  const response = await httpWallet.importAddress(account, address)
 })();
 ```
 
@@ -720,7 +756,7 @@ curl $url/wallet/block/$height
 const httpWallet = new bcoin.http.Wallet({ id: id });
 
 (async () => {
-  const blockInfo = await httpWallet.getWalletBlock(height);
+  const blockInfo = await httpWallet.getBlock(height);
   console.log(blockInfo);
 })
 ```
@@ -752,12 +788,12 @@ height <br> _int_ | height of block being queried
 
 ## Add xpubkey (Multisig)
 ```javascript
-let id, key;
+let id, key, account;
 ```
 
 ```shell--vars
 id="multi-foo"
-key=""
+key="tpubDCUQshhR98hjDDPtefuQdg4Dmpk5mes3TRyUp1Qa4BjxCVytfqmqNWmJ3tUZfqu4qLfEypQhNcpMF3yhZJ8h8hcahnxCzrqWmV5qVHHTqGM"
 ```
 
 ```shell--cli
@@ -772,7 +808,7 @@ curl $url/wallet/$id/shared-key \
 
 ```javascript
 const httpWallet = new bcoin.http.wallet({ id: id });
-const account = 'default';
+account = 'default';
 
 (async () => {
   const response = await httpWallet.addSharedKey(account, key);
@@ -790,6 +826,10 @@ const account = 'default';
 
 Add a shared xpubkey to wallet. Must be a multisig wallet.
 
+<aside class="notice">
+Note that since it must be a multisig, the wallet on creation should be set with <code>m</code> and <code>n</code> where <code>n</code> is greater than 1 (since the first key is always that wallet's own xpubkey)
+</aside>
+
 ### HTTP Request
 
 `PUT /wallet/:id/shared-key`
@@ -798,6 +838,7 @@ Add a shared xpubkey to wallet. Must be a multisig wallet.
 Paramter | Description
 ---------| --------------
 accountKey <br> _string_ | xpubkey to add to the multisig wallet
+account <br> _string_ | multisig account to add the xpubkey to (default='default')
 
 ## Remove xpubkey (Multisig)
 
@@ -807,7 +848,7 @@ let id, key;
 
 ```shell--vars
 id="multi-foo"
-key=""
+key="tpubDCUQshhR98hjDDPtefuQdg4Dmpk5mes3TRyUp1Qa4BjxCVytfqmqNWmJ3tUZfqu4qLfEypQhNcpMF3yhZJ8h8hcahnxCzrqWmV5qVHHTqGM"
 ```
 
 ```shell--cli
@@ -848,6 +889,7 @@ Remove shared xpubkey from wallet if present.
 Paramter | Description
 ---------| --------------
 accountKey <br> _string_ | xpubkey to add to the multisig wallet
+account <br> _string_ | multisig account to remove the key from (default='default')
 
 
 ## Get Public Key By Address
@@ -1082,7 +1124,10 @@ account <br>_string_ | BIP44 account to generate address from
 
 ##POST /wallet/:id/nested
 
-Derive new nested p2sh receiving address for account.
+Derive new nested p2sh receiving address for account. Note that this can't be done on a non-witness account otherwise you will receive the following error:
+
+`[error] (node) Cannot derive nested on non-witness account.`
+
 
 ### HTTP Request
 

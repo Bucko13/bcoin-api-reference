@@ -40,7 +40,7 @@ search: true
 
 Welcome to the Bcoin API!
 
-The default bcoin HTTP server listens on the standard RPC port (`8332` for main, `18333` for testnet, and `18555` default for simnet). It exposes a REST json api, as well as a JSON-RPC api.
+The default bcoin HTTP server listens on the standard RPC port (`8332` for main, `18332` for testnet, `48332` for regtest, and `18556` default for simnet). It exposes a REST json api, as well as a JSON-RPC api.
 
 # Authentication
 ## Auth
