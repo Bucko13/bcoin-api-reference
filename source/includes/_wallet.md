@@ -1122,18 +1122,94 @@ Parameter | Description
 --------- | -------------
 account <br>_string_ | BIP44 account to generate address from
 
-##POST /wallet/:id/nested
+## Derive Nested Address
+
+```javascript
+let id, account;
+```
+
+```shell--vars
+id="foo"
+account="baz"
+```
+
+```shell--cli
+bcoin cli wallet --id=$id nested --account=$account
+```
+
+```shell--curl
+curl $url/wallet/$id/nested -X POST --data '{"account": "'$account'"}'
+```
+
+```javascript
+const httpWallet = bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.createNested(account);
+  console.log(response);
+})();
+```
+
+> Sample response
+
+```json
+{
+  "network": "testnet",
+  "wid": 31,
+  "id": "foo",
+  "name": "baz",
+  "account": 0,
+  "branch": 2,
+  "index": 2,
+  "witness": true,
+  "nested": true,
+  "publicKey": "02a7a12fa67a7f0dc0bb2ae2c45d80c9b6248c004ef8b3f8da3f6feaf623f60939",
+  "script": null,
+  "program": "0014be20ad0c7ad43d1bb9f922f15cd7ba63b7fee290",
+  "type": "scripthash",
+  "address": "2NBzYG49AiNJjUr7NA1r4eee8jUpacb3Eo2"
+}
+```
 
 Derive new nested p2sh receiving address for account. Note that this can't be done on a non-witness account otherwise you will receive the following error:
 
 `[error] (node) Cannot derive nested on non-witness account.`
 
-
 ### HTTP Request
 
 `POST /wallet/:id/nested`
 
-##GET /wallet/:id/balance
+### Post Paramters
+Paramter | Description
+--------- | --------------
+account <br> _string_ | account to derive the nested address for (default='default')
+
+## Get Balance
+```javascript
+let id, account;
+```
+
+```shell--vars
+id='foo'
+account='bar'
+```
+
+```shell--cli
+bcoin cli wallet --id=$id balance --account=$account
+```
+
+```shell--curl
+curl $url/wallet/$id/balance?account=$account
+```
+
+```javascript
+const httpWallet = bcoin.http.Wallet({ id: $id });
+
+(async () => {
+  const response = httpWallet.getBalance(account);
+  console.log(response);
+})();
+```
 
 > Sample response:
 
@@ -1141,17 +1217,24 @@ Derive new nested p2sh receiving address for account. Note that this can't be do
 {
   "wid": 1,
   "id": "foo",
-  "account": -1,
+  "account": 1,
   "unconfirmed": "8149.9999546",
   "confirmed": "8150.0"
 }
 ```
 
-Get wallet or account balance.
+Get wallet or account balance. If no account option is passed, the call defaults to wallet balance (with account index of `-1`)
 
 ### HTTP Request
 
-`GET /wallet/:id/balance`
+`GET /wallet/:id/balance?account=:account`
+
+### Request Paramters
+
+Paramters | Description
+--------- | -------------
+id <br> _string_ | wallet id to get balance of
+account <br> _string_ | account name (optional, defaults to entire wallet balance)
 
 ##GET /wallet/:id/coin
 
