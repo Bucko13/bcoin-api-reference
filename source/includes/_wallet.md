@@ -1295,12 +1295,155 @@ List all wallet coins available.
 
 `GET /wallet/:id/coin`
 
-##GET /wallet/:id/locked
+## Lock Coin/Outpoints
+
+```javascript
+let id, passphrase, hash, index;
+```
+
+```shell--vars
+id="foo"
+passphrase="bar"
+hash="dd1a110edcdcbb3110a1cbe0a545e4b0a7813ffa5e77df691478205191dad66f"
+index="0"
+```
+
+```shell--cli
+# Not Supported in CLI
+```
+
+```shell--curl
+curl $url/wallet/$id/$hash/$index -X PUT --data '{"passphrase": "'$pasphrase'"}'
+```
+
+```javascript
+const httpWallet = bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.lockCoin(hash, index);
+  console.log(response);
+})();
+```
 
 > Sample response:
 
 ```json
-[{"hash":"dd1a110edcdcbb3110a1cbe0a545e4b0a7813ffa5e77df691478205191dad66f","index":0}]
+{
+  "success": true
+}
+```
+
+Lock outpoints.
+
+### HTTP Request
+
+`PUT /wallet/:id/locked/:hash/:index`
+
+### Request Parameters
+Paramters | Description
+---------- | --------------
+id <br> _string_ | id of wallet that contains the outpoint
+hash <br> _string_ | hash of transaction that created the outpoint
+index <br> _string_ or _int_ | index of the output in the transaction being referenced
+
+### Body Paramters
+Parameter | Description
+--------- | ------------
+passphrase <br> _string_ | passphrase of wallet being referenced
+
+## Unlock Outpoint
+
+```javascript
+let id, passphrase, hash, index;
+```
+
+```shell--vars
+id="foo"
+passphrase="bar"
+hash="dd1a110edcdcbb3110a1cbe0a545e4b0a7813ffa5e77df691478205191dad66f"
+index="0"
+```
+
+```shell--cli
+# Not Supported in CLI
+```
+
+```shell--curl
+curl $url/wallet/$id/$hash/$index -X PUT --data '{"passphrase": "'$pasphrase'"}'
+```
+
+```javascript
+const httpWallet = bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.unlockCoin(hash, index);
+  console.log(response);
+})();
+```
+
+> Sample response:
+
+```json
+{
+  "success": true
+}
+```
+
+Unlock outpoints.
+
+### HTTP Request
+
+`DEL /wallet/:id/locked/:hash/:index`
+
+### Request Parameters
+Paramters | Description
+---------- | --------------
+id <br> _string_ | id of wallet that contains the outpoint
+hash <br> _string_ | hash of transaction that created the outpoint
+index <br> _string_ or _int_ | index of the output in the transaction being referenced
+
+### Body Paramters
+Parameter | Description
+--------- | ------------
+passphrase <br> _string_ | passphrase of wallet being referenced
+
+
+## Get Locked Outpoints
+
+```javascript
+let id;
+```
+
+```shell--vars
+id="foo"
+```
+
+```shell--cli
+# Not supported in CLI
+```
+
+```shell--curl
+curl $url/wallet/$id/locked
+```
+
+```javascript
+const httpWallet = bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.getLocked();
+  console.log(response);
+})();
+```
+
+> Sample response:
+
+```json
+[
+  {
+    "hash":"dd1a110edcdcbb3110a1cbe0a545e4b0a7813ffa5e77df691478205191dad66f",
+    "index":0
+  }
+]
 ```
 
 Get all locked outpoints.
@@ -1309,43 +1452,66 @@ Get all locked outpoints.
 
 `GET /wallet/:id/locked`
 
-##PUT /wallet/:id/locked/:hash/:index
+### Request Parameters
+Paramters | Description
+---------- | --------------
+id <br> _string_ | id of wallet to check for outpoints
 
-Lock outpoints.
 
-### HTTP Request
+## Get Wallet Coin
 
-`PUT /wallet/:id/locked/:hash/:index`
+```javascript
+let id, hash, index;
+```
 
-##DEL /wallet/:id/locked/:hash/:index
+```shell--vars
+id="foo"
+hash="efbaa2681576e0c2a9ee8e0bdaddd889e95e9631b94467b57552e5bc7048c2ae"
+index=0
+```
 
-Unlock outpoints.
+```shell--cli
+# command is wallet agnostic, same as in vanilla coin command
 
-### HTTP Request
+bcoin cli coin $hash $index
+```
 
-`DEL /wallet/:id/locked/:hash/:index`
+```shell--curl
+curl $url/wallet/$id/coin/$hash/$index
+```
 
-##GET /wallet/:id/coin/:hash/:index
+```javascript
+const httpWallet = new bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.getCoin(hash, index);
+  console.log(response);
+})();
+```
 
 > Sample response:
 
 ```json
-[
-  {
-    "version": 1,
-    "height": -1,
-    "value": "44.9999546",
-    "script": "76a914f4376876aa04f36fc71a2618878986504e40ef9c88ac",
-    "address": "n3nFYgQR2mrLwC3X66xHNsx4UqhS3rkSnY",
-    "coinbase": false,
-    "hash": "0de09025e68b78e13f5543f46a9516fa37fcc06409bf03eda0e85ed34018f822",
-    "index": 1
-  }
-]
+{
+  "version": 1,
+  "height": 1180963,
+  "value": 1000,
+  "script": "76a9145730f139d833e3af30ccfb7c4e253ff4bab5de9888ac",
+  "address": "moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA",
+  "coinbase": false,
+  "hash": "efbaa2681576e0c2a9ee8e0bdaddd889e95e9631b94467b57552e5bc7048c2ae",
+  "index": 0
+}
 ```
 
-Get wallet coins.
-
+Get wallet coin
 ### HTTP Request
 
 `GET /wallet/:id/coin/:hash/:index`
+
+### Request Parameters
+Paramters | Description
+---------- | --------------
+id <br> _string_ | id of wallet that contains the outpoint
+hash <br> _string_ | hash of transaction that created the outpoint
+index <br> _string_ or _int_ | index of the output in the transaction being referenced
