@@ -1203,7 +1203,7 @@ curl $url/wallet/$id/balance?account=$account
 ```
 
 ```javascript
-const httpWallet = bcoin.http.Wallet({ id: $id });
+const httpWallet = bcoin.http.Wallet({ id: id });
 
 (async () => {
   const response = httpWallet.getBalance(account);
@@ -1236,8 +1236,59 @@ Paramters | Description
 id <br> _string_ | wallet id to get balance of
 account <br> _string_ | account name (optional, defaults to entire wallet balance)
 
-##GET /wallet/:id/coin
+## List all Coins
 
+```javascript
+let id;
+```
+
+```shell--vars
+id="foo"
+```
+
+```shell--curl
+curl $url/wallet/$id/coin
+```
+
+```shell--cli
+bcoin cli wallet --id=$id coins
+```
+
+```javascript
+const httpWallet = bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = httpWallet.getCoins();
+  console.log(response);
+})();
+```
+
+> Sample Response
+
+```json
+[
+  {
+    "version": 1,
+    "height": 1180963,
+    "value": 1000,
+    "script": "76a9145730f139d833e3af30ccfb7c4e253ff4bab5de9888ac",
+    "address": "moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA",
+    "coinbase": false,
+    "hash": "bf49aaf50dfa229b99e83d29cae2515487b05cccb88cd111fb2ac738dac1058a",
+    "index": 0
+  },
+  {
+    "version": 1,
+    "height": 1180963,
+    "value": 1000,
+    "script": "76a9145730f139d833e3af30ccfb7c4e253ff4bab5de9888ac",
+    "address": "moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA",
+    "coinbase": false,
+    "hash": "efbaa2681576e0c2a9ee8e0bdaddd889e95e9631b94467b57552e5bc7048c2ae",
+    "index": 0
+  }
+]
+```
 List all wallet coins available.
 
 ### HTTP Request
