@@ -1313,7 +1313,7 @@ index="0"
 ```
 
 ```shell--curl
-curl $url/wallet/$id/$hash/$index -X PUT --data '{"passphrase": "'$pasphrase'"}'
+curl $url/wallet/$id/locked$hash/$index -X PUT --data '{"passphrase": "'$pasphrase'"}'
 ```
 
 ```javascript
@@ -1369,7 +1369,7 @@ index="0"
 ```
 
 ```shell--curl
-curl $url/wallet/$id/$hash/$index -X PUT --data '{"passphrase": "'$pasphrase'"}'
+curl $url/wallet/$id/locked/$hash/$index -X DELETE --data '{"passphrase": "'$pasphrase'"}'
 ```
 
 ```javascript
