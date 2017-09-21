@@ -1122,18 +1122,94 @@ Parameter | Description
 --------- | -------------
 account <br>_string_ | BIP44 account to generate address from
 
-##POST /wallet/:id/nested
+## Derive Nested Address
+
+```javascript
+let id, account;
+```
+
+```shell--vars
+id="foo"
+account="baz"
+```
+
+```shell--cli
+bcoin cli wallet --id=$id nested --account=$account
+```
+
+```shell--curl
+curl $url/wallet/$id/nested -X POST --data '{"account": "'$account'"}'
+```
+
+```javascript
+const httpWallet = bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.createNested(account);
+  console.log(response);
+})();
+```
+
+> Sample response
+
+```json
+{
+  "network": "testnet",
+  "wid": 31,
+  "id": "foo",
+  "name": "baz",
+  "account": 0,
+  "branch": 2,
+  "index": 2,
+  "witness": true,
+  "nested": true,
+  "publicKey": "02a7a12fa67a7f0dc0bb2ae2c45d80c9b6248c004ef8b3f8da3f6feaf623f60939",
+  "script": null,
+  "program": "0014be20ad0c7ad43d1bb9f922f15cd7ba63b7fee290",
+  "type": "scripthash",
+  "address": "2NBzYG49AiNJjUr7NA1r4eee8jUpacb3Eo2"
+}
+```
 
 Derive new nested p2sh receiving address for account. Note that this can't be done on a non-witness account otherwise you will receive the following error:
 
 `[error] (node) Cannot derive nested on non-witness account.`
 
-
 ### HTTP Request
 
 `POST /wallet/:id/nested`
 
-##GET /wallet/:id/balance
+### Post Paramters
+Paramter | Description
+--------- | --------------
+account <br> _string_ | account to derive the nested address for (default='default')
+
+## Get Balance
+```javascript
+let id, account;
+```
+
+```shell--vars
+id='foo'
+account='bar'
+```
+
+```shell--cli
+bcoin cli wallet --id=$id balance --account=$account
+```
+
+```shell--curl
+curl $url/wallet/$id/balance?account=$account
+```
+
+```javascript
+const httpWallet = bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = httpWallet.getBalance(account);
+  console.log(response);
+})();
+```
 
 > Sample response:
 
@@ -1141,32 +1217,233 @@ Derive new nested p2sh receiving address for account. Note that this can't be do
 {
   "wid": 1,
   "id": "foo",
-  "account": -1,
+  "account": 1,
   "unconfirmed": "8149.9999546",
   "confirmed": "8150.0"
 }
 ```
 
-Get wallet or account balance.
+Get wallet or account balance. If no account option is passed, the call defaults to wallet balance (with account index of `-1`)
 
 ### HTTP Request
 
-`GET /wallet/:id/balance`
+`GET /wallet/:id/balance?account=:account`
 
-##GET /wallet/:id/coin
+### Request Paramters
 
+Paramters | Description
+--------- | -------------
+id <br> _string_ | wallet id to get balance of
+account <br> _string_ | account name (optional, defaults to entire wallet balance)
+
+## List all Coins
+
+```javascript
+let id;
+```
+
+```shell--vars
+id="foo"
+```
+
+```shell--curl
+curl $url/wallet/$id/coin
+```
+
+```shell--cli
+bcoin cli wallet --id=$id coins
+```
+
+```javascript
+const httpWallet = bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = httpWallet.getCoins();
+  console.log(response);
+})();
+```
+
+> Sample Response
+
+```json
+[
+  {
+    "version": 1,
+    "height": 1180963,
+    "value": 1000,
+    "script": "76a9145730f139d833e3af30ccfb7c4e253ff4bab5de9888ac",
+    "address": "moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA",
+    "coinbase": false,
+    "hash": "bf49aaf50dfa229b99e83d29cae2515487b05cccb88cd111fb2ac738dac1058a",
+    "index": 0
+  },
+  {
+    "version": 1,
+    "height": 1180963,
+    "value": 1000,
+    "script": "76a9145730f139d833e3af30ccfb7c4e253ff4bab5de9888ac",
+    "address": "moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA",
+    "coinbase": false,
+    "hash": "efbaa2681576e0c2a9ee8e0bdaddd889e95e9631b94467b57552e5bc7048c2ae",
+    "index": 0
+  }
+]
+```
 List all wallet coins available.
 
 ### HTTP Request
 
 `GET /wallet/:id/coin`
 
-##GET /wallet/:id/locked
+## Lock Coin/Outpoints
+
+```javascript
+let id, passphrase, hash, index;
+```
+
+```shell--vars
+id="foo"
+passphrase="bar"
+hash="dd1a110edcdcbb3110a1cbe0a545e4b0a7813ffa5e77df691478205191dad66f"
+index="0"
+```
+
+```shell--cli
+# Not Supported in CLI
+```
+
+```shell--curl
+curl $url/wallet/$id/locked$hash/$index -X PUT --data '{"passphrase": "'$pasphrase'"}'
+```
+
+```javascript
+const httpWallet = bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.lockCoin(hash, index);
+  console.log(response);
+})();
+```
 
 > Sample response:
 
 ```json
-[{"hash":"dd1a110edcdcbb3110a1cbe0a545e4b0a7813ffa5e77df691478205191dad66f","index":0}]
+{
+  "success": true
+}
+```
+
+Lock outpoints.
+
+### HTTP Request
+
+`PUT /wallet/:id/locked/:hash/:index`
+
+### Request Parameters
+Paramters | Description
+---------- | --------------
+id <br> _string_ | id of wallet that contains the outpoint
+hash <br> _string_ | hash of transaction that created the outpoint
+index <br> _string_ or _int_ | index of the output in the transaction being referenced
+
+### Body Paramters
+Parameter | Description
+--------- | ------------
+passphrase <br> _string_ | passphrase of wallet being referenced
+
+## Unlock Outpoint
+
+```javascript
+let id, passphrase, hash, index;
+```
+
+```shell--vars
+id="foo"
+passphrase="bar"
+hash="dd1a110edcdcbb3110a1cbe0a545e4b0a7813ffa5e77df691478205191dad66f"
+index="0"
+```
+
+```shell--cli
+# Not Supported in CLI
+```
+
+```shell--curl
+curl $url/wallet/$id/locked/$hash/$index -X DELETE --data '{"passphrase": "'$pasphrase'"}'
+```
+
+```javascript
+const httpWallet = bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.unlockCoin(hash, index);
+  console.log(response);
+})();
+```
+
+> Sample response:
+
+```json
+{
+  "success": true
+}
+```
+
+Unlock outpoints.
+
+### HTTP Request
+
+`DEL /wallet/:id/locked/:hash/:index`
+
+### Request Parameters
+Paramters | Description
+---------- | --------------
+id <br> _string_ | id of wallet that contains the outpoint
+hash <br> _string_ | hash of transaction that created the outpoint
+index <br> _string_ or _int_ | index of the output in the transaction being referenced
+
+### Body Paramters
+Parameter | Description
+--------- | ------------
+passphrase <br> _string_ | passphrase of wallet being referenced
+
+
+## Get Locked Outpoints
+
+```javascript
+let id;
+```
+
+```shell--vars
+id="foo"
+```
+
+```shell--cli
+# Not supported in CLI
+```
+
+```shell--curl
+curl $url/wallet/$id/locked
+```
+
+```javascript
+const httpWallet = bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.getLocked();
+  console.log(response);
+})();
+```
+
+> Sample response:
+
+```json
+[
+  {
+    "hash":"dd1a110edcdcbb3110a1cbe0a545e4b0a7813ffa5e77df691478205191dad66f",
+    "index":0
+  }
+]
 ```
 
 Get all locked outpoints.
@@ -1175,43 +1452,66 @@ Get all locked outpoints.
 
 `GET /wallet/:id/locked`
 
-##PUT /wallet/:id/locked/:hash/:index
+### Request Parameters
+Paramters | Description
+---------- | --------------
+id <br> _string_ | id of wallet to check for outpoints
 
-Lock outpoints.
 
-### HTTP Request
+## Get Wallet Coin
 
-`PUT /wallet/:id/locked/:hash/:index`
+```javascript
+let id, hash, index;
+```
 
-##DEL /wallet/:id/locked/:hash/:index
+```shell--vars
+id="foo"
+hash="efbaa2681576e0c2a9ee8e0bdaddd889e95e9631b94467b57552e5bc7048c2ae"
+index=0
+```
 
-Unlock outpoints.
+```shell--cli
+# command is wallet agnostic, same as in vanilla coin command
 
-### HTTP Request
+bcoin cli coin $hash $index
+```
 
-`DEL /wallet/:id/locked/:hash/:index`
+```shell--curl
+curl $url/wallet/$id/coin/$hash/$index
+```
 
-##GET /wallet/:id/coin/:hash/:index
+```javascript
+const httpWallet = new bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.getCoin(hash, index);
+  console.log(response);
+})();
+```
 
 > Sample response:
 
 ```json
-[
-  {
-    "version": 1,
-    "height": -1,
-    "value": "44.9999546",
-    "script": "76a914f4376876aa04f36fc71a2618878986504e40ef9c88ac",
-    "address": "n3nFYgQR2mrLwC3X66xHNsx4UqhS3rkSnY",
-    "coinbase": false,
-    "hash": "0de09025e68b78e13f5543f46a9516fa37fcc06409bf03eda0e85ed34018f822",
-    "index": 1
-  }
-]
+{
+  "version": 1,
+  "height": 1180963,
+  "value": 1000,
+  "script": "76a9145730f139d833e3af30ccfb7c4e253ff4bab5de9888ac",
+  "address": "moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA",
+  "coinbase": false,
+  "hash": "efbaa2681576e0c2a9ee8e0bdaddd889e95e9631b94467b57552e5bc7048c2ae",
+  "index": 0
+}
 ```
 
-Get wallet coins.
-
+Get wallet coin
 ### HTTP Request
 
 `GET /wallet/:id/coin/:hash/:index`
+
+### Request Parameters
+Paramters | Description
+---------- | --------------
+id <br> _string_ | id of wallet that contains the outpoint
+hash <br> _string_ | hash of transaction that created the outpoint
+index <br> _string_ or _int_ | index of the output in the transaction being referenced
