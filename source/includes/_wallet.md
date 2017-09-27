@@ -236,7 +236,7 @@ const httpWallet = new bcoin.http.Wallet({ id: id });
 const id = 'foo';
 
 (async () => {
-  const wallet = await httpWallet.getWalletInfo();
+  const wallet = await httpWallet.getInfo();
   console.log(wallet);
 })();
 ```
