@@ -161,13 +161,74 @@ Paramter | Description
 id <br> _string_ | id of wallet to get pending/unconfirmed txs
 
 
-##GET /wallet/:id/tx/range
+## Get Range of Transactions
+```javascript
+let id, account, start, end;
+```
 
+```shell--vars
+id="foo"
+account="foo"
+start="1506909119"
+end="1506909154"
+```
+
+```shell--cli
+# range not available in CLI
+```
+
+```shell--curl
+curl $url/wallet/$id/tx/range --data '{"account":"'$account'", "start":"'$start'", "end":"'$end'"}'
+```
+
+```javascript
+const httpWallet = new bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.getRange(account, {start: start, end: end});
+  console.log(response);
+})();
+```
+> Sample Response
+
+```json
+[
+  { "wid": 1,
+    "id": "primary",
+    "hash": "80ac63671e7b8635d10d372c4c3bed5615624d9fa28dfd747abf440417d70983",
+    "height": -1,
+    "block": null,
+    "time": 0,
+    "mtime": 1506909119,
+    "date": "2017-10-02T01:51:59Z",
+    "size": 200,
+    "virtualSize": 173,
+    "fee": 0,
+    "rate": 0,
+    "confirmations": 0,
+    "inputs": [ [Object] ],
+    "outputs": [ [Object], [Object] ],
+    "tx": "010000000001010000000000000000000000000000000000000000000000000000000000000000ffffffff20028d010e6d696e65642062792062636f696e045460ad97080000000000000000ffffffff02bc03062a010000001976a914d7ee508e06ece23679ba9ee0a770561ae2ed595688ac0000000000000000266a24aa21a9ed5772988727e8641cf3c7d2bf5a7fee9a5d0e827de0b6bed5658eee8f0821b5200120000000000000000000000000000000000000000000000000000000000000000000000000"
+  },
+  ...
+]
+```
 Get range of wallet transactions by timestamp. Returns array of tx details.
+
+<aside class="notice">
+Note that there are other options documented that `getRange` accepts in the options body, `limit` and `reverse`. At the time of writing however they do not have any effect.
+</aside>
 
 ### HTTP Request
 
 `GET /wallet/:id/tx/range`
+
+### Body Parameters
+Paramter | Description
+-------- | -------------------------
+account <br>_string_ | account to get the tx history from
+start <br> _int_ | start time to get range from
+end <br> _int_ | end time to get range from
 
 ##GET /wallet/:id/tx/last
 
