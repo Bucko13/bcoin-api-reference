@@ -60,10 +60,9 @@ const httpWallet = new bcoin.http.Wallet({ id: id });
 const account = 'default';
 
 (async () => {
-  const response = httpWallet.getHistory(account);
+  const response = await httpWallet.getHistory(account);
   console.log(response);
 })();
-
 ```
 > Sample Response
 
@@ -118,13 +117,49 @@ Get wallet TX history. Returns array of tx details.
 ### HTTP Request
 `GET /wallet/:id/tx/history`
 
-##GET /wallet/:id/tx/unconfirmed
+### Request Parameters
+Paramter | Description
+-------- | -------------------------
+id <br> _string_ | id of wallet to get history of
+
+## Get Pending Transactions
+
+```javascript
+let id;
+```
+
+```shell--vars
+id='foo'
+```
+
+```shell--cli
+bcoin cli wallet --id=$id pending
+```
+
+```shell--curl
+curl $url/wallet/$id/tx/unconfirmed
+```
+
+```javascript
+const httpWallet = new bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.getPending(account);
+  console.log(response);
+})();
+```
 
 Get pending wallet transactions. Returns array of tx details.
 
 ### HTTP Request
 
 `GET /wallet/:id/tx/unconfirmed`
+
+### Request Parameters
+Paramter | Description
+-------- | -------------------------
+id <br> _string_ | id of wallet to get pending/unconfirmed txs
+
 
 ##GET /wallet/:id/tx/range
 
