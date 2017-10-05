@@ -1,5 +1,75 @@
 # Wallet Transactions
 
+## Get Wallet TX Details
+
+```javascript
+let id, hash
+```
+
+```shell--vars
+id="foo"
+hash="18d2cf5683d7befe06941f59b7fb4ca0e915dcb9c6aece4ce8966a29e7c576fe"
+```
+
+```shell--cli
+bcoin cli wallet --id=$id tx $hash
+```
+
+```shell--curl
+curl $url/wallet/$id/tx/$hash
+```
+
+```javascript
+const httpWallet = new bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.getTX(hash);
+  console.log(response);
+})();
+```
+> Sample Response
+
+```json
+{
+  "wid": 1,
+  "id": "foo",
+  "hash": "18d2cf5683d7befe06941f59b7fb4ca0e915dcb9c6aece4ce8966a29e7c576fe",
+  "height": -1,
+  "block": null,
+  "time": 0,
+  "mtime": 1507077109,
+  "date": "2017-10-04T00:31:49Z",
+  "size": 225,
+  "virtualSize": 225,
+  "fee": 4540,
+  "rate": 20177,
+  "confirmations": 0,
+  "inputs":
+   [ { value: 5000009080,
+       address: "SdCEuxkbdMygcKtL36x2CT8p1vhz56SsbG",
+       path: [Object] } ],
+  "outputs":
+   [ { value: 100000000,
+       address: "SP7K3cSLH66zDisioqPrTC3QSRwP9GPENB",
+       path: null },
+     { value: 4900004540,
+       address: "SSzzdLbBeWBwNTUpbGdD9gBk6Wzk34sT7J",
+       path: [Object] } ],
+  "tx": "010000000148ae6682231f381845f98049c871e9b6bf0a9a7f5c5270354f71079262577977000000006a47304402203359117c409d292700fbacc03e4b540066a6b8ca763f1dd578e8262fe5e74c1b02206c91f816755469cd4a6b110941b51f29e251b86afe246456cf17823ef4fc7f5301210299c1a1049d546a720dd614034ce2802a3f64d64c37b729ae184825f71d0a037affffffff0200e1f505000000001976a91413eab6745a3fcbcf8b4448c130ff8bc37db6e91b88acbc221024010000001976a9143e9958577401fe8d75ed6f162cc6832fcb26094188ac00000000"
+}
+```
+Get wallet transaction details.
+
+### HTTP Request
+
+`GET /wallet/:id/tx/:hash`
+
+### Request Parameters
+Parameter | Description
+--------- | --------------
+id <br> _string_ | id of wallet that handled the transaction
+hash <br> _string_ | hash of the transaction you're trying to retrieve
+
 ## Delete Transaction
 ```javascript
 let id, hash, passphrase;
@@ -237,73 +307,3 @@ Get last N wallet transactions.
 ### HTTP Request
 
 `GET /wallet/:id/tx/last` -->
-
-## Get Wallet Transaction Details
-
-```javascript
-let id, hash
-```
-
-```shell--vars
-id="foo"
-hash="18d2cf5683d7befe06941f59b7fb4ca0e915dcb9c6aece4ce8966a29e7c576fe"
-```
-
-```shell--cli
-bcoin cli wallet --id=$id $hash
-```
-
-```shell--curl
-curl $url/wallet/$id/tx/$hash
-```
-
-```javascript
-const httpWallet = new bcoin.http.Wallet({ id: id });
-
-(async () => {
-  const response = await httpWallet.getTX(hash);
-  console.log(response);
-})();
-```
-> Sample Response
-
-```json
-{
-  "wid": 1,
-  "id": "foo",
-  "hash": "18d2cf5683d7befe06941f59b7fb4ca0e915dcb9c6aece4ce8966a29e7c576fe",
-  "height": -1,
-  "block": null,
-  "time": 0,
-  "mtime": 1507077109,
-  "date": "2017-10-04T00:31:49Z",
-  "size": 225,
-  "virtualSize": 225,
-  "fee": 4540,
-  "rate": 20177,
-  "confirmations": 0,
-  "inputs":
-   [ { value: 5000009080,
-       address: "SdCEuxkbdMygcKtL36x2CT8p1vhz56SsbG",
-       path: [Object] } ],
-  "outputs":
-   [ { value: 100000000,
-       address: "SP7K3cSLH66zDisioqPrTC3QSRwP9GPENB",
-       path: null },
-     { value: 4900004540,
-       address: "SSzzdLbBeWBwNTUpbGdD9gBk6Wzk34sT7J",
-       path: [Object] } ],
-  "tx": "010000000148ae6682231f381845f98049c871e9b6bf0a9a7f5c5270354f71079262577977000000006a47304402203359117c409d292700fbacc03e4b540066a6b8ca763f1dd578e8262fe5e74c1b02206c91f816755469cd4a6b110941b51f29e251b86afe246456cf17823ef4fc7f5301210299c1a1049d546a720dd614034ce2802a3f64d64c37b729ae184825f71d0a037affffffff0200e1f505000000001976a91413eab6745a3fcbcf8b4448c130ff8bc37db6e91b88acbc221024010000001976a9143e9958577401fe8d75ed6f162cc6832fcb26094188ac00000000"
-}
-```
-Get wallet transaction details.
-
-### HTTP Request
-
-`GET /wallet/:id/tx/:hash`
-
-### Request Parameters
-Parameter | Description
---------- | --------------
-id <br> _string_ | id of wallet that handled the transaction
-hash <br> _string_ | hash of the transaction you're trying to retrieve
