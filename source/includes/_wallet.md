@@ -543,7 +543,6 @@ const options = {
 
 ```json
 {
-{
   "wid": 13,
   "id": "foo",
   "hash": "c2da22cafcd076ea3db74bb2e3cf50f030e5240aa5daf4f778fb4954a866b41c",
