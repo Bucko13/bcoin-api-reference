@@ -1,374 +1,74 @@
 # Wallet Transactions
 
-## Send a transaction
+## Get Wallet TX Details
 
 ```javascript
-let id, passphrase, rate, value, address;
+let id, hash
 ```
 
 ```shell--vars
 id="foo"
-passphrase="bar"
-rate=100
-value=3000
-address="moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA"
+hash="18d2cf5683d7befe06941f59b7fb4ca0e915dcb9c6aece4ce8966a29e7c576fe"
 ```
 
 ```shell--cli
-bcoin cli wallet send --id=$id --value=$value --address=$address ---passphrase=$passphrase
+bcoin cli wallet --id=$id tx $hash
 ```
 
 ```shell--curl
-curl $url/wallet/$id/send \
-  -X POST \
-  --data '{
-    "passphrase":"'$passphrase'",
-    "rate":'$rate',
-    "outputs":[
-      {"address":"'$address'", "value":'$value'}
-    ]
-  }'
-```
-
-```javascript
-const httpWallet = bcoin.http.Wallet({ id: id });
-const options = {
-  rate: rate,
-  outputs: [{ value: value, address; address }]
-};
-
-(async () => {
-  const tx = await httpWallet.send(options);
-  console.log(tx);
-})();
-```
-
-> Sample response:
-
-```json
-{
-{
-  "wid": 13,
-  "id": "foo",
-  "hash": "c2da22cafcd076ea3db74bb2e3cf50f030e5240aa5daf4f778fb4954a866b41c",
-  "height": -1,
-  "block": null,
-  "time": 0,
-  "mtime": 1503364758,
-  "date": "2017-08-22T01:19:18Z",
-  "size": 225,
-  "virtualSize": 225,
-  "fee": 22,
-  "rate": 100,
-  "confirmations": 0,
-  "inputs": [
-    {
-      "value": 59991393,
-      "address": "mgChJ3wXDqRns7Y6UhjXCyxeuZZJoQNj7c",
-      "path": {
-        "name": "default",
-        "account": 0,
-        "change": true,
-        "derivation": "m/0'/1/5"
-      }
-    }
-  ],
-  "outputs": [
-    {
-      "value": 10000000,
-      "script": "76a9143f4f69730dcb175c830b94226ae13f89bef969c488ac",
-      "address": "mmHhzmwiUzorZLYhFH9fhrfFTAHGhx1biN"
-    },
-    {
-      "value": 30000000,
-      "script": "76a9143f4f69730dcb175c830b94226ae13f89bef969c488ac",
-      "address": "mmHhzmwiUzorZLYhFH9fhrfFTAHGhx1biN"
-    }
-
-  ],
-  "tx": "01000000015a9b8fa3fb300a29e9cde6464f49882228862b8e333792fea35ad15536383417010000006a47304402202df28a6fe24dc26b016acee539e137b9502009f57ae6988d468d203e770339f202203b6ab4cc020493061db2d405b2799af2b872d3395f5798616fc51e59f304d5cd0121028986f0724eb55b66bba72985212b95a2c5487631e411dc9cc5348a4531928129ffffffff02e8030000000000001976a9144462dc0989942e38474616dc104e46486c5744ee88ac63619303000000001976a9149affd314659d5ce9fa815fde4e82c879d1ea41d188ac00000000"
-}
-
-```
-
-Create, sign, and send a transaction.
-
-### HTTP Request
-
-`POST /wallet/:id/send`
-
-### Post Paramaters
-Parameter | Description
---------- | ------------------
-rate <br> _int_ | the rate for transaction fees. Denominated in satoshis per kb
-outputs <br> _array_ | An array of outputs to send for the transaction
-smart <br> _bool_ | whether or not to estimate a smart fee based on current mempool
-account <br> _string_ | account to use for transaction
-passphrase <br> _string_ | passphrase to unlock the account
-
-
-### Output object
-Property | Description
---------- | -----------
-value <br> _int_ | Value to send in satoshis
-address <br> _string_ | destination address for transaction
-
-## Create a Transaction
-```javascript
-let id, rate, value, address, passphrase;
-```
-
-```shell--vars
-id="foo"
-passphrase="bar"
-rate=100
-value=.3
-address="moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA"
-```
-
-```shell--cli
-bcoin cli wallet mktx --id=$id --rate=$rate --value=$value --address=$address --passphrase=$passphrase
-```
-
-```shell--curl
-curl $url/wallet/$id/create \
-  -X POST \
-  --data '{
-    "rate":"'$rate'",
-    "passphrase": "'$passphrase'"
-    "outputs":[
-      {"address":"'$address'", "value":'$value'}
-    ]
-  }'
-```
-
-```javascript
-const httpWallet = new bcoin.http.Wallet({ id: id });
-const outputs = [{ value: value, address: address }]
-const options = {
-  passphrase: passphrase,
-  outputs: outputs,
-  rate: rate,
-};
-
-(async () => {
-  const tx = await httpWallet.createTX(options);
-  console.log(tx);
-})();
-```
-
-> Sample response:
-
-```json
-{
-  "hash": "0799a1d3ebfd108d2578a60e1b685350d42e1ef4d5cd326f99b8bf794c81ed17",
-  "witnessHash": "0799a1d3ebfd108d2578a60e1b685350d42e1ef4d5cd326f99b8bf794c81ed17",
-  "fee": "0.0000454",
-  "rate": "0.00020088",
-  "mtime": 1486686322,
-  "version": 1,
-  "flag": 1,
-  "inputs": [
-    {
-      "prevout": {
-        "hash": "6dd8dfa9b425a4126061a1032bc6ff6e208b75ee09d0aac089d105dcf972465a",
-        "index": 0
-      },
-      "script": "483045022100e7f1d57e47cd8a28b7c27e015b291f3fd43a6eb0c051a4b65d8697b5133c29f5022020cada0f62a32aecd473f606780b2aef3fd9cbd44cfd5e9e3d9fe6eee32912df012102272dae7ff2302597cb785fd95529da6c07e32946e65ead419291258aa7b17871",
-      "witness": "00",
-      "sequence": 4294967295,
-      "coin": {
-        "version": 1,
-        "height": 2,
-        "value": "50.0",
-        "script": "76a9149621fb4fc6e2e48538f56928f79bef968bf17ac888ac",
-        "address": "muCnMvAoUFZXzuao4oy3vQJFcUntax53wE",
-        "coinbase": true
-      }
-    }
-  ],
-  "outputs": [
-    {
-      "value": 10000000,
-      "script": "76a9143f4f69730dcb175c830b94226ae13f89bef969c488ac",
-      "address": "mmHhzmwiUzorZLYhFH9fhrfFTAHGhx1biN"
-    },
-    {
-      "value": 30000000,
-      "script": "76a9143f4f69730dcb175c830b94226ae13f89bef969c488ac",
-      "address": "moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA"
-    }
-  ],
-  "locktime": 0
-}
-```
-
-Create and template a transaction (useful for multisig).
-Do not broadcast or add to wallet.
-
-### HTTP Request
-
-`POST /wallet/:id/create`
-
-### Post Paramters
-Paramter | Description
---------- | ----------------
-rate <br> _int_ | the rate for transaction fees. Denominated in satoshis per kb
-outputs <br> _array_ | An array of outputs to send for the transaction
-smart <br> _bool_ | whether or not to estimate a smart fee based on current mempool
-passphrase <br> _string_ | passphrase to unlock the account
-
-
-### Output object
-Property | Description
---------- | -----------
-value <br> _int_ | Value to send in bitcoin (as of beta-1.14)
-address <br> _string_ | destination address for transaction
-
-
-
-## Sign Transaction
-```javascript
-let id, tx, passphrase;
-```
-
-```shell--vars
-id="foo"
-passphrase="bar"
-tx="01000000010d72c6b2582c2b2e625d29dd5ad89209de7e2600ab12a1a8e05813c28b703d2c000000006b483045022100af93a8761ad22af858c5bc4e68b5991eac017dcddd933cf125553ec0b83eb8f30220373a4d8ee331ac4c3975718e2a789f873af0520ddbd2db18957cdf488ccd4ee301210215a9110e2a9b293c332c28d69f88081aa2a949fde67e35a13fbe19410994ffd9ffffffff0280969800000000001976a9143f4f69730dcb175c830b94226ae13f89bef969c488ac80c3c901000000001976a9143f4f69730dcb175c830b94226ae13f89bef969c488ac00000000"
-```
-
-```shell--cli
-bcoin cli wallet sign --id=$id --passphrase=$passphrase --tx=$tx
-```
-
-```shell--curl
-curl $url/wallet/$id/sign \
-  -X POST \
-  --data '{"tx": "'$tx'", "passphrase":"'$passphrase'"}'
-```
-
-```javascript
-const httpWallet = new bcoin.http.Wallet({ id: id });
-const options = { passphrase: passphrase };
-(async () => {
-  const signedTx = await httpWallet.sign(tx, options);
-  console.log(signedTx);
-})();
-```
-
-> Sample Output
-
-```json
-{
-  "hash": "2a22606ee555d2c26ec979f0c45cd2dc18c7177056189cb345989749fd587868",
-  "witnessHash": "2a22606ee555d2c26ec979f0c45cd2dc18c7177056189cb345989749fd587868",
-  "fee": 10000000,
-  "rate": 44247787,
-  "mtime": 1503683721,
-  "version": 1,
-  "inputs": [
-    {
-      "prevout": {
-        "hash": "2c3d708bc21358e0a8a112ab00267ede0992d85add295d622e2b2c58b2c6720d",
-        "index": 0
-      },
-      "script": "483045022100af93a8761ad22af858c5bc4e68b5991eac017dcddd933cf125553ec0b83eb8f30220373a4d8ee331ac4c3975718e2a789f873af0520ddbd2db18957cdf488ccd4ee301210215a9110e2a9b293c332c28d69f88081aa2a949fde67e35a13fbe19410994ffd9",
-      "witness": "00",
-      "sequence": 4294967295,
-      "coin": {
-        "version": 1,
-        "height": 1179720,
-        "value": 50000000,
-        "script": "76a9145730f139d833e3af30ccfb7c4e253ff4bab5de9888ac",
-        "address": "moTyiK7aExe2v3hFJ9BCsYooTziX15PGuA",
-        "coinbase": false
-      }
-    }
-  ],
-  "outputs": [
-    {
-      "value": 10000000,
-      "script": "76a9143f4f69730dcb175c830b94226ae13f89bef969c488ac",
-      "address": "mmHhzmwiUzorZLYhFH9fhrfFTAHGhx1biN"
-    },
-    {
-      "value": 30000000,
-      "script": "76a9143f4f69730dcb175c830b94226ae13f89bef969c488ac",
-      "address": "mmHhzmwiUzorZLYhFH9fhrfFTAHGhx1biN"
-    }
-  ],
-  "locktime": 0,
-  "hex": "01000000010d72c6b2582c2b2e625d29dd5ad89209de7e2600ab12a1a8e05813c28b703d2c000000006b483045022100af93a8761ad22af858c5bc4e68b5991eac017dcddd933cf125553ec0b83eb8f30220373a4d8ee331ac4c3975718e2a789f873af0520ddbd2db18957cdf488ccd4ee301210215a9110e2a9b293c332c28d69f88081aa2a949fde67e35a13fbe19410994ffd9ffffffff0280969800000000001976a9143f4f69730dcb175c830b94226ae13f89bef969c488ac80c3c901000000001976a9143f4f69730dcb175c830b94226ae13f89bef969c488ac00000000"
-}
-```
-
-Sign a templated transaction (useful for multisig).
-
-### HTTP Request
-
-`POST /wallet/:id/sign`
-
-### Post Paramters
-Parameter | Description
-----------| -----------------
-tx <br> _string_ | the hex of the transaction you would like to sign
-passphrase <br> _string_ | passphrase to unlock the wallet
-
-## Zap Transactions
-
-```javascript
-let id, age, account;
-```
-
-```shell--vars
-id="foo"
-account="baz"
-age=259200 # 72 hours
-```
-
-```shell--cli
-bcoin cli wallet zap --id=$id account=$account age=$age
-```
-
-```shell--curl
-curl $url/wallet/$id/zap \
-  -X POST \
-  --data '{
-            "account": "'$account'",
-            "age": "'$age'"
-          }'
+curl $url/wallet/$id/tx/$hash
 ```
 
 ```javascript
 const httpWallet = new bcoin.http.Wallet({ id: id });
 
 (async () => {
-  const response = httpWallet.zap(account, age);
+  const response = await httpWallet.getTX(hash);
   console.log(response);
 })();
 ```
-
 > Sample Response
-
 
 ```json
 {
-  "success": true
+  "wid": 1,
+  "id": "foo",
+  "hash": "18d2cf5683d7befe06941f59b7fb4ca0e915dcb9c6aece4ce8966a29e7c576fe",
+  "height": -1,
+  "block": null,
+  "time": 0,
+  "mtime": 1507077109,
+  "date": "2017-10-04T00:31:49Z",
+  "size": 225,
+  "virtualSize": 225,
+  "fee": 4540,
+  "rate": 20177,
+  "confirmations": 0,
+  "inputs":
+   [ { value: 5000009080,
+       address: "SdCEuxkbdMygcKtL36x2CT8p1vhz56SsbG",
+       path: [Object] } ],
+  "outputs":
+   [ { value: 100000000,
+       address: "SP7K3cSLH66zDisioqPrTC3QSRwP9GPENB",
+       path: null },
+     { value: 4900004540,
+       address: "SSzzdLbBeWBwNTUpbGdD9gBk6Wzk34sT7J",
+       path: [Object] } ],
+  "tx": "010000000148ae6682231f381845f98049c871e9b6bf0a9a7f5c5270354f71079262577977000000006a47304402203359117c409d292700fbacc03e4b540066a6b8ca763f1dd578e8262fe5e74c1b02206c91f816755469cd4a6b110941b51f29e251b86afe246456cf17823ef4fc7f5301210299c1a1049d546a720dd614034ce2802a3f64d64c37b729ae184825f71d0a037affffffff0200e1f505000000001976a91413eab6745a3fcbcf8b4448c130ff8bc37db6e91b88acbc221024010000001976a9143e9958577401fe8d75ed6f162cc6832fcb26094188ac00000000"
 }
 ```
-
-Remove all pending transactions older than a specified age.
+Get wallet transaction details.
 
 ### HTTP Request
 
-`POST /wallet/:id/zap?age=3600`
+`GET /wallet/:id/tx/:hash`
 
-### Post Parameters
-Paramaters | Description
------------ | -------------
-account <br> _string_ or _number_ | account to zap from
-age <br> _number_ | age threshold to zap up to (unix time)
+### Request Parameters
+Parameter | Description
+--------- | --------------
+id <br> _string_ | id of wallet that handled the transaction
+hash <br> _string_ | hash of the transaction you're trying to retrieve
 
 ## Delete Transaction
 ```javascript
@@ -407,15 +107,117 @@ Paramters | Description
 id <br> _string_ | id of wallet where the transaction is that you want to remove
 hash <br> _string_ | hash of transaction you would like to remove.
 
-##GET /wallet/:id/tx/history
+## Get Wallet TX History
+
+```javascript
+let id;
+```
+
+```shell--vars
+id='foo'
+```
+
+```shell--cli
+bcoin cli wallet --id=$id history
+```
+
+```shell--curl
+curl $url/wallet/$id/tx/history
+```
+
+```javascript
+const httpWallet = new bcoin.http.Wallet({ id: id });
+const account = 'default';
+
+(async () => {
+  const response = await httpWallet.getHistory(account);
+  console.log(response);
+})();
+```
+> Sample Response
+
+```json
+[
+  {
+     "wid": 1,
+     "id": "primary",
+     "hash": "f5968051ce275d89b7a6b797eb6e6b081243ecf027872fc6949fae443e21b858",
+     "height": -1,
+     "block": null,
+     "time": 0,
+     "mtime": 1503690544,
+     "date": "2017-08-25T19:49:04Z",
+     "size": 226,
+     "virtualSize": 226,
+     "fee": 0,
+     "rate": 0,
+     "confirmations": 0,
+     "inputs": [
+       {
+         "value": 0,
+         "address": "mp2w1u4oqZnHDd1zDeAvCTX9B3SaFsUFQx",
+         "path": null
+       }
+     ],
+     "outputs": [
+       {
+         "value": 100000,
+         "address": "myCkrhQbJwqM8wKi9YuhyTjN3pukNuWxZ9",
+         "path": {
+           "name": "default",
+           "account": 0,
+           "change": false,
+           "derivation": "m/0'/0/3"
+         }
+       },
+       {
+         "value": 29790920,
+         "address": "mqNm1rSYVqD23Aj6fkupApuSok9DNZAeBk",
+         "path": null
+       }
+     ],
+     "tx": "0100000001ef8a38cc946c57634c2db05fc298bf94f5c88829c5a6e2b0610fcc7b38a9264f010000006b483045022100e98db5ddb92686fe77bb44f86ce8bf6ff693c1a1fb2fb434c6eeed7cf5e7bed4022053dca3980a902ece82fb8e9e5204c26946893388e4663dbb71e78946f49dd0f90121024c4abc2a3683891b35c04e6d40a07ee78e7d86ad9d7a14265fe214fe84513676ffffffff02a0860100000000001976a914c2013ac1a5f6a9ae91f66e71bbfae4cc762c2ca988acc892c601000000001976a9146c2483bf52052e1125fc75dd77dad06d65b70a8288ac00000000"
+   },
+ ...
+]
+```
 
 Get wallet TX history. Returns array of tx details.
 
 ### HTTP Request
-
 `GET /wallet/:id/tx/history`
 
-##GET /wallet/:id/tx/unconfirmed
+### Request Parameters
+Paramter | Description
+-------- | -------------------------
+id <br> _string_ | id of wallet to get history of
+
+## Get Pending Transactions
+
+```javascript
+let id;
+```
+
+```shell--vars
+id='foo'
+```
+
+```shell--cli
+bcoin cli wallet --id=$id pending
+```
+
+```shell--curl
+curl $url/wallet/$id/tx/unconfirmed
+```
+
+```javascript
+const httpWallet = new bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.getPending(account);
+  console.log(response);
+})();
+```
 
 Get pending wallet transactions. Returns array of tx details.
 
@@ -423,26 +225,85 @@ Get pending wallet transactions. Returns array of tx details.
 
 `GET /wallet/:id/tx/unconfirmed`
 
-##GET /wallet/:id/tx/range
+### Request Parameters
+Paramter | Description
+-------- | -------------------------
+id <br> _string_ | id of wallet to get pending/unconfirmed txs
 
+
+## Get Range of Transactions
+```javascript
+let id, account, start, end;
+```
+
+```shell--vars
+id="foo"
+account="foo"
+start="1506909119"
+end="1506909154"
+```
+
+```shell--cli
+# range not available in CLI
+```
+
+```shell--curl
+curl $url/wallet/$id/tx/range?start=$start
+```
+
+```javascript
+const httpWallet = new bcoin.http.Wallet({ id: id });
+
+(async () => {
+  const response = await httpWallet.getRange(account, {start: start, end: end});
+  console.log(response);
+})();
+```
+> Sample Response
+
+```json
+[
+  { "wid": 1,
+    "id": "primary",
+    "hash": "80ac63671e7b8635d10d372c4c3bed5615624d9fa28dfd747abf440417d70983",
+    "height": -1,
+    "block": null,
+    "time": 0,
+    "mtime": 1506909119,
+    "date": "2017-10-02T01:51:59Z",
+    "size": 200,
+    "virtualSize": 173,
+    "fee": 0,
+    "rate": 0,
+    "confirmations": 0,
+    "inputs": [ [Object] ],
+    "outputs": [ [Object], [Object] ],
+    "tx": "010000000001010000000000000000000000000000000000000000000000000000000000000000ffffffff20028d010e6d696e65642062792062636f696e045460ad97080000000000000000ffffffff02bc03062a010000001976a914d7ee508e06ece23679ba9ee0a770561ae2ed595688ac0000000000000000266a24aa21a9ed5772988727e8641cf3c7d2bf5a7fee9a5d0e827de0b6bed5658eee8f0821b5200120000000000000000000000000000000000000000000000000000000000000000000000000"
+  },
+  ...
+]
+```
 Get range of wallet transactions by timestamp. Returns array of tx details.
+
+<aside class="notice">
+Note that there are other options documented that `getRange` accepts in the options body, `limit` and `reverse`. At the time of writing however they do not have any effect.
+</aside>
 
 ### HTTP Request
 
 `GET /wallet/:id/tx/range`
 
-##GET /wallet/:id/tx/last
+### Body Parameters
+Paramter | Description
+-------- | -------------------------
+account <br>_string_ | account to get the tx history from
+start <br> _int_ | start time to get range from
+end <br> _int_ | end time to get range from
+
+<!-- ##GET /wallet/:id/tx/last
 
 Get last N wallet transactions.
 
 ### HTTP Request
 
-`GET /wallet/:id/tx/last`
-
-##GET /wallet/:id/tx/:hash
-
-Get wallet transaction details.
-
-### HTTP Request
-
-`GET /wallet/:id/tx/:hash`
+`GET /wallet/:id/tx/last` -->
