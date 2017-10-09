@@ -10,7 +10,7 @@ language_tabs: # must be one of https://git.io/vQNgJ
 
 toc_footers:
   - <a href='http://bcoin.io/slack-signup.html'>Join us on slack</a>
-  - <a href='https://github.com/bcoin-org/bcoin'>See the code on Github</a>
+  - <a href='https://github.com/bcoin-org/bcoin'>See the code on GitHub</a>
   - <a href='http://bcoin.io/guides.html'>Browse the guides</a>
   - <a href='http://bcoin.io/docs/index.html'>Full API Documentation</a>
   - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
