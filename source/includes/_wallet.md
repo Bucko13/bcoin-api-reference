@@ -350,23 +350,24 @@ id <br> _string_ | named id of the wallet whose info you would like to retrieve
 ## Create A Wallet
 
 ```javascript
-let id, passphrase, witness;
+let id, passphrase, witness, accountKey;
 ```
 
 ```shell--vars
 id = 'foo'
 passphrase = 'bar'
 witness = false
+accountKey='tpubDDh2XgSds1vBbeVgye88gsGQeCityoywRndtyrXcmvWqCgsFUyUKwzeDv8HiJhu9fC8jRAFMqxr4jj8eRTNTycmMao5wmsAScVf4jSMdPYZ'
 ```
 
 ```shell--curl
 curl $url/wallet/$id \
   -X PUT \
-  --data '{"witness":'$witness', "passphrase":"'$passphrase'"}'
+  --data '{"witness":'$witness', "passphrase":"'$passphrase'", watchOnly: "true", "accountKey":"'$accountKey'"}'
 ```
 
 ```shell--cli
-bcoin cli wallet create $id --witness=$witness --passphrase=$passphrase
+bcoin cli wallet create $id --witness=$witness --passphrase=$passphrase --watch=$accountKey
 ```
 
 ```javascript
@@ -374,7 +375,9 @@ const client = new bcoin.http.Client();
 const options = {
   id: id,
   passphrase: passphrase,
-  witness: witness
+  witness: witness,
+  watchOnly: true,
+  accountKey: accountKey
 };
 
 (async() => {
